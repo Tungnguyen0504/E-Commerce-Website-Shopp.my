@@ -6,6 +6,8 @@
 package Servlet;
 
 import dao.AllDao;
+import dao.paggingDAO;
+import generic.getUrl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -26,8 +28,7 @@ import model.Products;
 public class filterShopControl extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -69,24 +70,40 @@ public class filterShopControl extends HttpServlet {
         if (action.equalsIgnoreCase("sort")) {
             doGet_sort(request, response);
         }
+        getUrl.getUrl(request, response);
+        request.getRequestDispatcher("shop-grid.jsp").forward(request, response);
     }
 
     protected void doGet_filterPrice(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String indexPage = request.getParameter("index");
         String cid = request.getParameter("id");
         String min = request.getParameter("min");
         String max = request.getParameter("max");
         String st = request.getParameter("st");
 
-        AllDao dao = new AllDao();
-        List<Products> list = dao.filterShop(cid, min, max);
-        List<Brand> listB = dao.getBrandByCid(cid);
+        AllDao dao1 = new AllDao();
+        paggingDAO dao2 = new paggingDAO();
+        List<Brand> listB = dao1.getBrandByCid(cid);
+
+        int count = dao2.countFilterPriceShop(cid, min, max);
+        int endPage = count / 9;
+        if (count % 9 != 0) {
+            endPage++;
+        }
+        if (indexPage == null) {
+            indexPage = "1";
+        }
+        int index = Integer.parseInt(indexPage);
+        List<Products> list1 = dao2.paggingFilterPriceShop(cid, min, max, index);
 
         request.setAttribute("st", st);
-        request.setAttribute("listP", list);
+        request.setAttribute("listP", list1);
         request.setAttribute("listB", listB);
         request.setAttribute("cid", cid);
-        request.getRequestDispatcher("shop-grid.jsp").forward(request, response);
+        request.setAttribute("end", endPage);
+        request.setAttribute("tag", index);
+        request.setAttribute("indexPage", indexPage);
     }
 
     protected void doGet_sort(HttpServletRequest request, HttpServletResponse response)
@@ -97,9 +114,10 @@ public class filterShopControl extends HttpServlet {
         String indexPage = request.getParameter("index");
 
         AllDao dao = new AllDao();
+        paggingDAO dao2 = new paggingDAO();
         List<Brand> listB = dao.getBrandByCid(cid);
 
-        int count = dao.countProduct(cid);
+        int count = dao2.countProduct(cid);
         int endPage = count / 9;
         if (count % 9 != 0) {
             endPage++;
@@ -108,7 +126,7 @@ public class filterShopControl extends HttpServlet {
             indexPage = "1";
         }
         int index = Integer.parseInt(indexPage);
-        List<Products> list1 = dao.paggingSortProduct(cid, index, type);
+        List<Products> list1 = dao2.paggingSortProduct(cid, index, type);
 
         request.setAttribute("indexPage", indexPage);
         request.setAttribute("sort", type);
@@ -118,7 +136,6 @@ public class filterShopControl extends HttpServlet {
         request.setAttribute("listB", listB);
         request.setAttribute("end", endPage);
         request.setAttribute("tag", index);
-        request.getRequestDispatcher("shop-grid.jsp").forward(request, response);
     }
 
     /**

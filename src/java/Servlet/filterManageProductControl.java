@@ -7,6 +7,8 @@ package Servlet;
 
 import model.Products;
 import dao.AllDao;
+import dao.paggingDAO;
+import generic.getUrl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -26,8 +28,7 @@ import model.Category;
 public class filterManageProductControl extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -61,6 +62,8 @@ public class filterManageProductControl extends HttpServlet {
         if (action.equalsIgnoreCase("search")) {
             doPost_search(request, response);
         }
+        getUrl.getUrl(request, response);
+        request.getRequestDispatcher("manage-product.jsp").forward(request, response);
     }
 
     protected void doGet_sort(HttpServletRequest request, HttpServletResponse response)
@@ -69,7 +72,7 @@ public class filterManageProductControl extends HttpServlet {
         String indexPage = request.getParameter("index");
         String cid = request.getParameter("cid");
 
-        AllDao dao = new AllDao();
+        paggingDAO dao = new paggingDAO();
         int count = dao.countProduct(cid);
         int endPage = count / 9;
         if (count % 9 != 0) {
@@ -88,7 +91,6 @@ public class filterManageProductControl extends HttpServlet {
         request.setAttribute("end", endPage);
         request.setAttribute("tag", index);
         request.setAttribute("indexPage", indexPage);
-        request.getRequestDispatcher("manage-product.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -98,6 +100,8 @@ public class filterManageProductControl extends HttpServlet {
         if (action.equalsIgnoreCase("search")) {
             doPost_search(request, response);
         }
+        getUrl.getUrl(request, response);
+        request.getRequestDispatcher("manage-product.jsp").forward(request, response);
     }
 
     protected void doPost_search(HttpServletRequest request, HttpServletResponse response)
@@ -106,8 +110,9 @@ public class filterManageProductControl extends HttpServlet {
         String cid = request.getParameter("cid");
         String indexPage = request.getParameter("index");
 
-        AllDao dao = new AllDao();
-        int count = dao.countSearchProduct(txtSearch, cid);
+        paggingDAO dao2 = new paggingDAO();
+
+        int count = dao2.countSearchProduct(txtSearch, cid);
         int endPage = count / 9;
         if (count % 9 != 0) {
             endPage++;
@@ -116,7 +121,7 @@ public class filterManageProductControl extends HttpServlet {
             indexPage = "1";
         }
         int index = Integer.parseInt(indexPage);
-        List<Products> list1 = dao.paggingSearchProduct(txtSearch, cid, index);
+        List<Products> list1 = dao2.paggingSearchProduct(txtSearch, cid, index);
 
         request.setAttribute("count", count);
         request.setAttribute("end", endPage);
@@ -126,7 +131,6 @@ public class filterManageProductControl extends HttpServlet {
         request.setAttribute("cid", cid);
         request.setAttribute("indexPage", indexPage);
 
-        request.getRequestDispatcher("manage-product.jsp").forward(request, response);
     }
 
     @Override

@@ -12,15 +12,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import model.Brand;
 import model.Camera;
-import model.Feedback;
+import model.Coupon;
 import model.Laptop;
 import model.Order;
 import model.OrderDetails;
-import model.OrderHistory;
 import model.SPhone;
 import model.User;
 
@@ -45,7 +49,7 @@ public class AllDao {
             rs = ps.executeQuery();
             while (rs.next()) {
                 return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getBoolean(5),
-                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10));
+                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11));
             }
         } catch (Exception e) {
         }
@@ -62,7 +66,7 @@ public class AllDao {
             rs = ps.executeQuery();
             while (rs.next()) {
                 return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getBoolean(5),
-                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10));
+                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11));
             }
         } catch (Exception e) {
         }
@@ -79,7 +83,7 @@ public class AllDao {
             rs = ps.executeQuery();
             while (rs.next()) {
                 return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getBoolean(5),
-                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10));
+                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11));
             }
         } catch (Exception e) {
         }
@@ -204,6 +208,28 @@ public class AllDao {
         }
         return list;
     }
+    
+    public List<Products> getTop4BestSellers() {
+        List<Products> list = new ArrayList<>();
+        String query = "SELECT TOP 4 p.ProductID, p.CategoryID, p.ProductName, p.Tittle, p.Description, p.Quantity, p.Color, p.Image1, p.Image2, p.Image3, p.Image4, p.Brand, p.Price, p.PriceDiscount, p.DiscountPercent, SUM(od.Quantity) AS qt\n"
+                + "FROM dbo.Order_Details od JOIN dbo.Products p\n"
+                + "ON p.ProductID = od.ProductID\n"
+                + "GROUP BY p.ProductID, p.CategoryID, p.ProductName, p.Tittle, p.Description, p.Quantity, p.Color, p.Image1, p.Image2, p.Image3, p.Image4, p.Brand, p.Price, p.PriceDiscount, p.DiscountPercent\n"
+                + "ORDER BY qt DESC";
+        try {
+            //mo ket noi voi sql server
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Products(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                        rs.getInt(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10),
+                        rs.getString(11), rs.getString(12), rs.getDouble(13), rs.getDouble(14), rs.getInt(15)));
+            }
+        } catch (Exception e) {
+        }
+        return list;
+    }
 
     public List<Products> getTop6Sale() {
         List<Products> list = new ArrayList<>();
@@ -232,132 +258,6 @@ public class AllDao {
             //mo ket noi voi sql server
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new Products(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5),
-                        rs.getInt(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10),
-                        rs.getString(11), rs.getString(12), rs.getDouble(13), rs.getDouble(14), rs.getInt(15)));
-            }
-        } catch (Exception e) {
-        }
-        return list;
-    }
-
-    public int countSearchProduct(String txtSearch, String choose) {
-        String query = "SELECT COUNT(*) FROM dbo.Products p JOIN dbo.Category c\n"
-                + "ON c.CategoryID = p.CategoryID\n"
-                + "WHERE p.ProductName LIKE ? AND c.CategoryID = ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, "%" + txtSearch + "%");
-            ps.setString(2, choose);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (Exception e) {
-        }
-        return 0;
-    }
-
-    public List<Products> paggingSearchProduct(String txtSearch, String choose, int index) {
-        List<Products> list = new ArrayList<>();
-        String query = "SELECT * FROM dbo.Products p JOIN dbo.Category c\n"
-                + "ON c.CategoryID = p.CategoryID\n"
-                + "WHERE p.ProductName LIKE ? AND c.CategoryID = ?\n"
-                + "ORDER BY p.ProductID\n"
-                + "OFFSET ? ROWS FETCH NEXT 9 ROWS ONLY;";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, "%" + txtSearch + "%");
-            ps.setString(2, choose);
-            ps.setInt(3, (index - 1) * 9);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new Products(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5),
-                        rs.getInt(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10),
-                        rs.getString(11), rs.getString(12), rs.getDouble(13), rs.getDouble(14), rs.getInt(15)));
-            }
-        } catch (Exception e) {
-        }
-        return list;
-    }
-
-    public int countProduct(String cid) {
-        String query = "SELECT COUNT(*) FROM dbo.Products p JOIN dbo.Category c\n"
-                + "ON c.CategoryID = p.CategoryID\n"
-                + "WHERE p.CategoryID = ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, cid);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (Exception e) {
-        }
-        return 0;
-    }
-
-    public List<Products> paggingProduct(String cid, int index) {
-        List<Products> list = new ArrayList<>();
-        String query = "SELECT * FROM dbo.Products\n"
-                + "WHERE CategoryID = ?\n"
-                + "ORDER BY ProductID\n"
-                + "OFFSET ? ROWS FETCH NEXT 9 ROWS ONLY;";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, cid);
-            ps.setInt(2, (index - 1) * 9);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new Products(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5),
-                        rs.getInt(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10),
-                        rs.getString(11), rs.getString(12), rs.getDouble(13), rs.getDouble(14), rs.getInt(15)));
-            }
-        } catch (Exception e) {
-        }
-        return list;
-    }
-
-    public List<Products> paggingSortProduct(String cid, int index, String sort) {
-        List<Products> list = new ArrayList<>();
-        String query = "";
-        if (sort.equalsIgnoreCase("sortPriceASC")) {
-            query += "SELECT * FROM dbo.Products p JOIN dbo.Category c\n"
-                    + "ON c.CategoryID = p.CategoryID\n"
-                    + "WHERE p.CategoryID = ?\n"
-                    + "ORDER BY p.PriceDiscount ASC\n"
-                    + "OFFSET ? ROWS FETCH NEXT 9 ROWS ONLY;";
-        } else if (sort.equalsIgnoreCase("sortPriceDESC")) {
-            query += "SELECT * FROM dbo.Products p JOIN dbo.Category c\n"
-                    + "ON c.CategoryID = p.CategoryID\n"
-                    + "WHERE p.CategoryID = ?\n"
-                    + "ORDER BY p.PriceDiscount DESC\n"
-                    + "OFFSET ? ROWS FETCH NEXT 9 ROWS ONLY;";
-        } else if (sort.equalsIgnoreCase("sortNewArrival")) {
-            query += "SELECT * FROM dbo.Products p JOIN dbo.Category c\n"
-                    + "ON c.CategoryID = p.CategoryID\n"
-                    + "WHERE p.CategoryID = ?\n"
-                    + "ORDER BY p.ProductID DESC\n"
-                    + "OFFSET ? ROWS FETCH NEXT 9 ROWS ONLY;";
-        } else if (sort.equalsIgnoreCase("sortBestSeller")) {
-            query += "SELECT p.ProductID, p.SupplierID, p.CategoryID, p.ProductName, p.Tittle, p.Description, p.Quantity, p.Color, p.Image1, p.Image2, p.Image3, p.Image4, p.Brand, p.Price, p.PriceDiscount, p.DiscountPercent, p.Rating, c.CategoryID, c.CategoryName, SUM(od.Quantity) AS qt\n"
-                    + "FROM dbo.Order_Details od JOIN dbo.Products p ON p.ProductID = od.ProductID JOIN dbo.Category c ON c.CategoryID = p.CategoryID\n"
-                    + "WHERE c.CategoryID = ?\n"
-                    + "GROUP BY p.ProductID, p.SupplierID, p.CategoryID, p.ProductName, p.Tittle, p.Description, p.Quantity, p.Color, p.Image1, p.Image2, p.Image3, p.Image4, p.Brand, p.Price, p.PriceDiscount, p.DiscountPercent, p.Rating, c.CategoryID, c.CategoryName\n"
-                    + "ORDER BY qt DESC\n"
-                    + "OFFSET ? ROWS FETCH NEXT 9 ROWS ONLY;";
-        }
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, cid);
-            ps.setInt(2, (index - 1) * 9);
             rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new Products(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5),
@@ -498,23 +398,6 @@ public class AllDao {
         return list;
     }
 
-//    account.jsp
-    public List<User> getAllAccount() {
-        List<User> list = new ArrayList<User>();
-        String query = "SELECT * FROM dbo.Users";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getBoolean(5),
-                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10)));
-            }
-        } catch (Exception e) {
-        }
-        return list;
-    }
-
     public void deleteAccount(String id) {
         String query = "DELETE FROM dbo.Order_Details WHERE OrderID IN (SELECT o.OrderID FROM dbo.Orders o JOIN dbo.Users u ON u.UserID = o.UserID WHERE u.UserID = ?)\n"
                 + "DELETE FROM dbo.Orders WHERE userID = ?\n"
@@ -531,9 +414,9 @@ public class AllDao {
         }
     }
 
-    public void addNewAccount(String userName, String password, boolean isAdmin, String fullName, String email, String address, String city, String telephone) {
-        String query = "INSERT INTO dbo.Users ( UserName, Password, IsAdmin, isActive, FullName, Email, Address, City, Telephone) \n"
-                + "VALUES ('" + userName + "' , '" + password + "' , '" + isAdmin + "' , 'true' , '" + fullName + "' , '" + email + "' , '" + address + "' , '" + city + "' , '" + telephone + "' )";
+    public void addNewAccount(User u) {
+        String query = "INSERT INTO dbo.Users ( UserName, Password, IsAdmin, isActive, Image, FullName, Email, Address, City, Telephone) \n"
+                + "VALUES ('" + u.getUserName() + "' , '" + u.getPassword() + "' , '" + u.isIsAdmin() + "' , 'true' , '" + u.getImage() + "' , '" + u.getFullName() + "' , '" + u.getEmail() + "' , '" + u.getAddress() + "' , '" + u.getCity() + "' , '" + u.getTelephone() + "' )";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
@@ -543,22 +426,24 @@ public class AllDao {
         }
     }
 
-    public void updateAccount(String userName, String password, String isAdmin, String fullName, String email, String address, String city, String telephone, String userID) {
+    public void updateAccount(User u) {
         String query = "UPDATE dbo.Users \n"
-                + "SET UserName = ?, Password = ?, IsAdmin = ?, FullName = ?, Email = ?, Address = ?, City = ?, Telephone = ?\n"
+                + "SET UserName = ?, Password = ?, IsAdmin = ?, IsActive = ?, Image = ?, FullName = ?, Email = ?, Address = ?, City = ?, Telephone = ?\n"
                 + "WHERE UserID = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setString(1, userName);
-            ps.setString(2, password);
-            ps.setString(3, isAdmin);
-            ps.setString(4, fullName);
-            ps.setString(5, email);
-            ps.setString(6, address);
-            ps.setString(7, city);
-            ps.setString(8, telephone);
-            ps.setString(9, userID);
+            ps.setString(1, u.getUserName());
+            ps.setString(2, u.getPassword());
+            ps.setBoolean(3, u.isIsAdmin());
+            ps.setBoolean(4, u.isIsActive());
+            ps.setString(5, u.getImage());
+            ps.setString(6, u.getFullName());
+            ps.setString(7, u.getEmail());
+            ps.setString(8, u.getAddress());
+            ps.setString(9, u.getCity());
+            ps.setString(10, u.getTelephone());
+            ps.setInt(11, u.getUserID());
             ps.executeUpdate();
         } catch (Exception e) {
         }
@@ -576,149 +461,104 @@ public class AllDao {
         }
     }
 
-    public User findAccount(String userID) {
+    public User findAccount(int userID) {
         String query = "SELECT * FROM dbo.Users WHERE UserID = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setString(1, userID);
+            ps.setInt(1, userID);
             rs = ps.executeQuery();
             while (rs.next()) {
                 return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getBoolean(5),
-                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10));
+                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11));
             }
         } catch (Exception e) {
         }
         return null;
     }
 
-    public void deleteProduct(String productID) {
+    public void deleteProduct(int pid) {
         String query = "DELETE dbo.Product_Laptops WHERE ProductID = ?\n"
                 + "DELETE dbo.Product_SmartPhones WHERE ProductID = ?\n"
                 + "DELETE dbo.Product_Camera WHERE ProductID = ?\n"
                 + "DELETE dbo.Order_Details WHERE ProductID = ?\n"
+                + "DELETE dbo.Feedback WHERE ProductID = ?\n"
                 + "DELETE dbo.Products WHERE ProductID = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setString(1, productID);
-            ps.setString(2, productID);
-            ps.setString(3, productID);
-            ps.setString(4, productID);
-            ps.setString(5, productID);
+            ps.setInt(1, pid);
+            ps.setInt(2, pid);
+            ps.setInt(3, pid);
+            ps.setInt(4, pid);
+            ps.setInt(5, pid);
+            ps.setInt(6, pid);
             ps.executeUpdate();
 
         } catch (Exception e) {
         }
     }
 
-    public void updateProduct(String image1, String productName, int quantity, String color, String brand, double price, double priceDiscount, String categoryID, int productID) {
-        String query = "UPDATE dbo.Products \n"
-                + "SET Image1 = ?, ProductName = ?, Quantity = ?, Color = ?, Brand = ?, Price = ?, PriceDiscount = ?, CategoryID = ?\n"
+    public void updateProduct(int cid, int pid, String productName, String tittle, String des, int quantity, String color, String image1, String image2, String image3, String image4, String brand, double price, double priceDiscount, int discountPercent) {
+        String query = "UPDATE dbo.Products\n"
+                + "SET CategoryID = ? , ProductName = ? , Tittle = ? , Description = ? , Quantity = ? , Color = ? , Image1 = ? , Image2 = ? , Image3 = ? , Image4 = ? ,\n"
+                + "	Brand = ? , Price = ? , PriceDiscount = ? , DiscountPercent = ?\n"
                 + "WHERE ProductID = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setString(1, image1);
+            ps.setInt(1, cid);
             ps.setString(2, productName);
-            ps.setInt(3, quantity);
-            ps.setString(4, color);
-            ps.setString(5, brand);
-            ps.setDouble(6, price);
-            ps.setDouble(7, priceDiscount);
-            ps.setString(8, categoryID);
-            ps.setInt(9, productID);
+            ps.setString(3, tittle);
+            ps.setString(4, des);
+            ps.setInt(5, quantity);
+            ps.setString(6, color);
+            ps.setString(7, image1);
+            ps.setString(8, image2);
+            ps.setString(9, image3);
+            ps.setString(10, image4);
+            ps.setString(11, brand);
+            ps.setDouble(12, price);
+            ps.setDouble(13, priceDiscount);
+            ps.setDouble(14, discountPercent);
+            ps.setInt(15, pid);
             ps.executeUpdate();
         } catch (Exception e) {
         }
     }
 
-    public int countAccount() {
-        String query = "SELECT COUNT(*) FROM dbo.Users";
+    public void updateProductDetail(int productID, int cid, String p1, String p2, String p3, String p4, String p5, String p6, String p7, String p8, String p9) {
+        String query = "";
+        if (cid == 1) {
+            query += "UPDATE dbo.Product_Laptops\n"
+                    + "SET MemorySize = ? , CPUModel = ? , CPUSpeed = ? , DisplayResolution = ? , ScreenSize = ? , ItemWeight = ? , GraphicsCoprocessor = ? , OS = ? , RAMType = ? \n";
+        } else if (cid == 2) {
+            query += "UPDATE dbo.Product_SmartPhones\n"
+                    + "SET Screen = ? , OS = ? , RearCamera = ? , FrontCamera = ? , CPU = ? , RAM = ? , InternalMemory = ? , Sim = ? , Battery = ? \n";
+        } else {
+            query += "UPDATE dbo.Product_Camera\n"
+                    + "SET ModelNumber = ? , EyeAF = ? , ImageSensorType = ? , ImageSensorSize = ? , MaxFocalLength = ? , MinFocalLength = ? , MaxAperture = ? , EffectivePixels = ? , WifiEnabled = ? \n";
+        }
+        query += "WHERE ProductID = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getInt(1);
-            }
+            ps.setString(1, p1);
+            ps.setString(2, p2);
+            ps.setString(3, p3);
+            ps.setString(4, p4);
+            ps.setString(5, p5);
+            ps.setString(6, p6);
+            ps.setString(7, p7);
+            ps.setString(8, p8);
+            ps.setString(9, p9);
+            ps.setInt(10, productID);
+            ps.executeUpdate();
         } catch (Exception e) {
         }
-        return 0;
-    }
-
-    public List<User> paggingAccount(int index) {
-        List<User> list = new ArrayList<>();
-        String query = "SELECT * FROM dbo.Users\n"
-                + "ORDER BY UserID\n"
-                + "OFFSET ? ROWS FETCH NEXT 8 ROWS ONLY;";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, (index - 1) * 8);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getBoolean(5),
-                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10)));
-            }
-        } catch (Exception e) {
-        }
-        return list;
-    }
-
-    //My Account
-    public User findAccount1(String userName) {
-        String query = "SELECT * FROM dbo.Users WHERE UserName = ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, userName);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getBoolean(5),
-                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10));
-            }
-        } catch (Exception e) {
-        }
-        return null;
     }
 
     //order
-    public int countOrder() {
-        String query = "SELECT COUNT(*) FROM dbo.Orders";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (Exception e) {
-        }
-        return 0;
-    }
-
-    public List<Order> paggingOrder(int index) {
-        AllDao dao = new AllDao();
-        List<Order> list = new ArrayList<Order>();
-        String query = "SELECT * FROM dbo.Orders o JOIN dbo.Users u\n"
-                + "ON u.UserID = o.UserID\n"
-                + "ORDER BY o.OrderID\n"
-                + "OFFSET ? ROWS FETCH NEXT 8 ROWS ONLY;";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, (index - 1) * 8);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new Order(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getTimestamp(4),
-                        rs.getDouble(5), rs.getInt(6), dao.findAccount(rs.getInt(2) + "")));
-            }
-        } catch (Exception e) {
-        }
-        return list;
-    }
-
     public void deleteOrder(String orderID) {
         String query = "DELETE dbo.Order_Details WHERE OrderID = ?\n"
                 + "DELETE dbo.Orders WHERE OrderID = ?";
@@ -733,28 +573,23 @@ public class AllDao {
         }
     }
 
-    public List<OrderHistory> getOrderDetailByID(int oid) {
-        AllDao dao = new AllDao();
-        List<OrderHistory> list = new ArrayList<OrderHistory>();
-        String query = "SELECT * FROM dbo.Users u JOIN dbo.Orders o \n"
-                + "ON o.UserID = u.UserID JOIN dbo.Order_Details od\n"
-                + "ON od.OrderID = o.OrderID JOIN dbo.Products p\n"
-                + "ON p.ProductID = od.ProductID\n"
-                + "WHERE od.OrderID = " + oid;
+    public List<OrderDetails> getOrderDetailByID(int oid) {
+        List<OrderDetails> list = new ArrayList<OrderDetails>();
+        String query = "SELECT * FROM dbo.Order_Details WHERE OrderID = " + oid;
         try {
             //mo ket noi voi sql server
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(new OrderHistory(dao.getProductByID(rs.getInt(19)), dao.findOrderDetail(rs.getString(17)), dao.findOrder(rs.getString(11)), dao.findAccount(rs.getString(1))));
+                list.add(new OrderDetails(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getDouble(5)));
             }
         } catch (Exception e) {
         }
         return list;
     }
 
-    public void changeStatus(String id, String status) {
+    public void changeStatus(int oid, String status) {
         String query = "UPDATE dbo.Orders\n"
                 + "SET billStatus = ?\n"
                 + "WHERE OrderID = ?";
@@ -762,7 +597,7 @@ public class AllDao {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, status);
-            ps.setString(2, id);
+            ps.setInt(2, oid);
             ps.executeUpdate();
         } catch (Exception e) {
         }
@@ -853,15 +688,15 @@ public class AllDao {
         }
     }
 
-    public void addNewProduct2(int productID, String p1, String p2, String p3, String p4, String p5, String p6, String p7, String p8, String p9, String type) {
+    public void addNewProduct2(int productID, String p1, String p2, String p3, String p4, String p5, String p6, String p7, String p8, String p9, int cid) {
         String query = "";
-        if (type.equalsIgnoreCase("laptop")) {
+        if (cid == 1) {
             query += "INSERT INTO dbo.Product_Laptops( ProductID , MemorySize , CPUModel , CPUSpeed , DisplayResolution , ScreenSize , ItemWeight , GraphicsCoprocessor , OS , RAMType )\n"
                     + "VALUES  ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? )";
-        } else if (type.equalsIgnoreCase("sphone")) {
+        } else if (cid == 2) {
             query += "INSERT INTO dbo.Product_SmartPhones( ProductID , Screen , OS , RearCamera , FrontCamera , CPU , RAM , InternalMemory , Sim , Battery )\n"
                     + "VALUES  ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? )";
-        } else if (type.equalsIgnoreCase("camera")) {
+        } else if (cid == 3) {
             query += "INSERT INTO dbo.Product_Camera( ProductID , ModelNumber , EyeAF , ImageSensorType , ImageSensorSize , MaxFocalLength , MinFocalLength , MaxAperture , EffectivePixels , WifiEnabled )\n"
                     + "VALUES  ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? )";
         }
@@ -884,17 +719,32 @@ public class AllDao {
         }
     }
 
-    public Order findOrder(String oid) {
-        AllDao dao = new AllDao();
+    public int addProduct(Products p) {
+        int n = 0;
+        String query = "INSERT INTO dbo.Products ( CategoryID , ProductName , Tittle , Description , Quantity , Color , \n"
+                + "			Image1 , Image2 , Image3 , Image4 , Brand , Price , PriceDiscount , DiscountPercent)\n"
+                + "VALUES  ( '" + p.getCategoryID() + "' , '" + p.getProductName() + "' , '" + p.getTittle() + "' , '" + p.getDescription()
+                + "' , '" + p.getPQuantity() + "' , '" + p.getColor() + "' , '" + p.getImage1() + "' , '" + p.getImage2() + "' , '" + p.getImage3()
+                + "' , '" + p.getImage4() + "' , '" + p.getBrand() + "' , '" + p.getPrice() + "' , '" + p.getPriceDiscount() + "' , '" + p.getDiscountPercent() + "' )";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.executeUpdate();
+        } catch (Exception ex) {
+        }
+        return n;
+    }
+
+    public Order findOrder(int oid) {
         String query = "SELECT * FROM dbo.Orders WHERE OrderID = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setString(1, oid);
+            ps.setInt(1, oid);
             rs = ps.executeQuery();
             while (rs.next()) {
                 return new Order(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getTimestamp(4),
-                        rs.getDouble(5), rs.getInt(6), dao.findAccount(rs.getInt(2) + ""));
+                        rs.getDouble(5), rs.getInt(6));
             }
         } catch (Exception e) {
         }
@@ -919,72 +769,6 @@ public class AllDao {
         } catch (Exception e) {
         }
         return null;
-    }
-
-    public int countAllOrderHistory(String uid) {
-        String query = "SELECT COUNT(*) FROM dbo.Users u JOIN dbo.Orders o\n"
-                + "ON o.UserID = u.UserID JOIN dbo.Order_Details od\n"
-                + "ON od.OrderID = o.OrderID JOIN dbo.Products p\n"
-                + "ON p.ProductID = od.ProductID\n"
-                + "WHERE u.UserID =" + uid;
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (Exception e) {
-        }
-        return 0;
-    }
-
-    public List<OrderHistory> paggingAllOrderHistory(String uid, int index) {
-        AllDao dao = new AllDao();
-        List<OrderHistory> list = new ArrayList<OrderHistory>();
-        String query = "SELECT * FROM dbo.Users u JOIN dbo.Orders o\n"
-                + "ON o.UserID = u.UserID JOIN dbo.Order_Details od\n"
-                + "ON od.OrderID = o.OrderID JOIN dbo.Products p\n"
-                + "ON p.ProductID = od.ProductID\n"
-                + "WHERE u.UserID = ?\n"
-                + "ORDER BY od.OrderID DESC\n"
-                + "OFFSET ? ROWS FETCH NEXT 6 ROWS ONLY;";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, uid);
-            ps.setInt(2, (index - 1) * 6);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new OrderHistory(dao.getProductByID(rs.getInt(19)), dao.findOrderDetail(rs.getString(17)), dao.findOrder(rs.getString(11)), dao.findAccount(uid)));
-            }
-        } catch (Exception e) {
-        }
-        return list;
-    }
-
-    public List<OrderHistory> filterOrderHistory(String uid, String pid) {
-        AllDao dao = new AllDao();
-        List<OrderHistory> list = new ArrayList<OrderHistory>();
-        String query = "SELECT * FROM dbo.Users u JOIN dbo.Orders o \n"
-                + "ON o.UserID = u.UserID JOIN dbo.Order_Details od\n"
-                + "ON od.OrderID = o.OrderID JOIN dbo.Products p\n"
-                + "ON p.ProductID = od.ProductID\n"
-                + "WHERE u.UserID = ? \n"
-                + "AND p.ProductName LIKE ?";
-        try {
-            //mo ket noi voi sql server
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, uid);
-            ps.setString(2, "%" + pid + "%");
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new OrderHistory(dao.getProductByID(rs.getInt(19)), dao.findOrderDetail(rs.getString(17)), dao.findOrder(rs.getString(11)), dao.findAccount(uid)));
-            }
-        } catch (Exception e) {
-        }
-        return list;
     }
 
     public List<User> filterAccount(String type) {
@@ -1012,7 +796,7 @@ public class AllDao {
             rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getBoolean(5),
-                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10)));
+                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11)));
             }
         } catch (Exception e) {
         }
@@ -1028,14 +812,14 @@ public class AllDao {
             rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getBoolean(5),
-                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10)));
+                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11)));
             }
         } catch (Exception e) {
         }
         return list;
     }
 
-    public List<Products> filterShop(String cid, String min, String max) {
+    public List<Products> filterPriceShop(String cid, String min, String max) {
         List<Products> list = new ArrayList<>();
         String query = "SELECT * FROM dbo.Products p JOIN dbo.Category c\n"
                 + "ON c.CategoryID = p.CategoryID\n"
@@ -1088,41 +872,6 @@ public class AllDao {
         }
     }
 
-    public int countAllFeedbackByPid(int pid) {
-        String query = "SELECT COUNT(*) FROM dbo.Feedback\n"
-                + "WHERE ProductID = " + pid;
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (Exception e) {
-        }
-        return 0;
-    }
-
-    public List<Feedback> PaggingAllFeedbackByPid(int pid, int index) {
-        List<Feedback> list = new ArrayList<>();
-        String query = "SELECT * FROM dbo.Feedback\n"
-                + "WHERE ProductID = ? \n"
-                + "ORDER BY FeedbackDate DESC\n"
-                + "OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY;";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, pid);
-            ps.setInt(2, (index - 1) * 5);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new Feedback(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getString(5), rs.getTimestamp(6)));
-            }
-        } catch (Exception e) {
-        }
-        return list;
-    }
-
     public int countRating(int pid, int rating) {
         String query = "SELECT COUNT(Rating), ProductID, Rating FROM dbo.Feedback \n"
                 + "WHERE ProductID = " + pid + "\n";
@@ -1158,25 +907,102 @@ public class AllDao {
         return 0;
     }
 
-    public List<Feedback> getAllFeedbackByPid(int pid) {
-        List<Feedback> list = new ArrayList<>();
-        String query = "SELECT * FROM dbo.Feedback \n"
-                + "WHERE ProductID = " + pid;
+    public Coupon getCoupon(String couName) {
+        String query = "SELECT * FROM dbo.Coupon WHERE CouponName = '" + couName + "'";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(new Feedback(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getString(5), rs.getTimestamp(6)));
+                return new Coupon(rs.getInt(1), rs.getString(2), rs.getInt(3));
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public List<User> getAllUser() {
+        List<User> list = new ArrayList<>();
+        String query = "SELECT * FROM dbo.Users\n"
+                + "ORDER BY UserID";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getBoolean(5),
+                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11)));
             }
         } catch (Exception e) {
         }
         return list;
     }
 
+    public List<Order> getAllOrder() {
+        List<Order> list = new ArrayList<Order>();
+        String query = "SELECT * FROM dbo.Orders";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Order(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getTimestamp(4),
+                        rs.getDouble(5), rs.getInt(6)));
+            }
+        } catch (Exception e) {
+        }
+        return list;
+    }
+
+    //admin dashboard
+    public String earnMonthly(int date) {
+        double earn = 0;
+        long millis = System.currentTimeMillis();
+        Timestamp now = new Timestamp(millis);
+        AllDao dao1 = new AllDao();
+        for (Order o : dao1.getAllOrder()) {
+            if (TimeUnit.MILLISECONDS.toDays(now.getTime() - o.getOrderDate().getTime()) >= date && TimeUnit.MILLISECONDS.toDays(now.getTime() - o.getOrderDate().getTime()) <= (date + 30)) {
+                earn += o.getTotal();
+            }
+        }
+        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+        decimalFormat.format(earn);
+        return decimalFormat.format(earn);
+    }
+
+    public String monthFromNow(int count) {
+        SimpleDateFormat df = new SimpleDateFormat("MMM yyyy");
+        Date start = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(start);
+        c.add(Calendar.MONTH, count);
+        Date dateFrom = c.getTime();
+        return df.format(dateFrom);
+    }
+    
+     public List<Order> getRecentOrder() {
+        List<Order> list = new ArrayList<Order>();
+        String query = "SELECT TOP 5 * FROM dbo.Orders";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Order(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getTimestamp(4),
+                        rs.getDouble(5), rs.getInt(6)));
+            }
+        } catch (Exception e) {
+        }
+        return list;
+    }
+
+    //end admin dashboard
+
     public static void main(String[] args) {
         AllDao dao = new AllDao();
-        int f = dao.countRating(1, 4);
-        System.out.println(f);
+        List<OrderDetails> list = dao.getOrderDetailByID(1);
+        for (OrderDetails User : list) {
+            System.out.println(User);
+        }
     }
 }

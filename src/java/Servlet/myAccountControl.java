@@ -6,6 +6,7 @@
 package Servlet;
 
 import dao.AllDao;
+import generic.getUrl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -24,8 +25,7 @@ import model.User;
 public class myAccountControl extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -52,7 +52,8 @@ public class myAccountControl extends HttpServlet {
         HttpSession session = request.getSession();
         User u = (User) session.getAttribute("acc");
         if (u == null) {
-            response.sendRedirect("login");
+            getUrl.getUrl(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
             if (action.equalsIgnoreCase("viewAccount")) {
                 doPost_viewAccount(request, response);
@@ -76,7 +77,7 @@ public class myAccountControl extends HttpServlet {
 
     protected void doPost_viewAccount(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String uid = request.getParameter("uid");
+        int uid = Integer.parseInt(request.getParameter("uid"));
         AllDao dao = new AllDao();
         User u = dao.findAccount(uid);
         request.setAttribute("view", u);
@@ -85,7 +86,7 @@ public class myAccountControl extends HttpServlet {
 
     protected void doPost_viewPassword(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String uid = request.getParameter("uid");
+        int uid = Integer.parseInt(request.getParameter("uid"));
         AllDao dao = new AllDao();
         User u = dao.findAccount(uid);
         request.setAttribute("view", u);
@@ -94,15 +95,17 @@ public class myAccountControl extends HttpServlet {
 
     protected void doPost_changePassword(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("acc");
         String userName = request.getParameter("userName");
         String currentPass = request.getParameter("currentPass");
         String newPass = request.getParameter("newPass");
         String rePass = request.getParameter("rePass");
-        String name = request.getParameter("name");
+        int uid = user.getUserID();
         AllDao dao = new AllDao();
 
         User u = dao.Login(userName, currentPass);
-        User u1 = dao.findAccount1(name);
+        User u1 = dao.findAccount(uid);
         if (u == null) {
             request.setAttribute("mess", "<div class=\"alert alert-warning\" role=\"alert\">\n"
                     + "<img id=\"warning\" src=\"assets/images/icons/alert-icon-red-11.png\" alt=\"warnning\">Incorrect account !!\n"
@@ -126,17 +129,20 @@ public class myAccountControl extends HttpServlet {
     protected void doPost_update(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         AllDao dao = new AllDao();
+        int uid = Integer.parseInt(request.getParameter("uid"));
+        User u = dao.findAccount(uid);
         String userName = request.getParameter("userName");
-        String password = request.getParameter("password");
-        String isAdmin = request.getParameter("isAdmin");
+        String password = u.getPassword();
+        boolean isAdmin = u.isIsAdmin();
+        boolean isActive = u.isIsActive();
+        String image = request.getParameter("image");
         String fullName = request.getParameter("fullName");
         String email = request.getParameter("email");
         String telephone = request.getParameter("telephone");
         String address = request.getParameter("address");
         String city = request.getParameter("city");
-        String userID = request.getParameter("userID");
-
-        dao.updateAccount(userName, password, isAdmin, fullName, email, address, city, telephone, userID);
+        
+        dao.updateAccount(new User(uid, userName, password, isAdmin, isActive, image, fullName, email, address, city, telephone));
         response.sendRedirect("home");
     }
 

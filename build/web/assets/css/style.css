@@ -13593,7 +13593,9 @@ input#rate-5:checked ~ label{
 
 
 /*-- Sidebar Brand --*/
-
+.brands-section {
+    padding: 60px 0;
+}
 .sidebar-brand li {
     padding: 10px 25px;
     border-bottom: 1px solid #dddddd;
@@ -14470,6 +14472,8 @@ input#rate-5:checked ~ label{
 
 .checkout-cart-total ul {
     border-bottom: 1px solid #999999;
+    font-weight: 600;
+    display: flex;
 }
 
 .checkout-cart-total ul li {
@@ -14479,11 +14483,7 @@ input#rate-5:checked ~ label{
     font-weight: 600;
     margin-bottom: 16px;
     display: block;
-}
-
-.checkout-cart-total ul li span {
-    color: #202020;
-    float: right;
+    width: 75%
 }
 
 .checkout-cart-total p {
@@ -15776,7 +15776,7 @@ input#rate-5:checked ~ label{
     float: left;
 }
 
-.ee-register form input {
+.ee-register input {
     width: 100%;
     border: 1px solid #999999;
     line-height: 18px;
@@ -15787,7 +15787,7 @@ input#rate-5:checked ~ label{
     background-color: transparent;
 }
 
-.ee-register form input[type="submit"] {
+.ee-register input[type="submit"] {
     font-size: 16px;
     line-height: 25px;
     padding: 10px 15px;

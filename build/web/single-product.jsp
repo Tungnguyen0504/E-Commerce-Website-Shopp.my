@@ -29,6 +29,7 @@
         <link rel="stylesheet" href="assets/css/plugins.css">
         <link href="assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" href="assets/css/style.css">
+
         <style>
             .breadcrumb {
                 background-color: transparent;
@@ -179,7 +180,7 @@
                 opacity: 0.6;
             }
             #feedback-form {
-                padding: 15px; 50px 50px 50px;
+                padding: 15px 50px 50px 50px;
                 display: none;
             }
             #feedback-down {
@@ -208,9 +209,31 @@
                 width: 85%; 
                 border-radius: 10px;
             }
+            .center {
+                height: 400px;
+                position: relative;
+            }
+            .center #feedback-form {
+                margin-top: 50%;
+            }
+            .empty-feedback {
+                max-width: fit-content;
+                margin: auto;
+                padding-bottom: 36px;
+                text-align: center;
+            }
+            .empty-feedback p {
+                margin-top: 10px;
+                font-size: 15px;
+                color: #cd1817;
+                font-weight: 500;
+            }
+            #emote{
+                font-weight: bold;
+                color: chocolate;
+                font-family: "Amazon Ember",Arial,sans-serif;
+            }
         </style>
-        <!-- Modernizer JS -->
-        <script src="assets/js/vendor/modernizr-2.8.3.min.js"></script>
     </head>
 
     <body>
@@ -326,8 +349,8 @@
                                 <div class="desc">
                                     <p>${p.tittle}</p>
                                 </div>
-                                <c:if test="${p.PQuantity > 0}"><span class="availability">Availability: <span>In Stock</span></span></c:if>
-                                <c:if test="${p.PQuantity <= 0}"><span class="availability">Availability: <span style="font-weight: bold; color: red;">Out of Stock</span></span></c:if>
+                                <c:if test="${p.PQuantity > 0}"><span class="availability">Availability: <span style="font-weight: bold; color: #5ac478; font-size: 16px;">In Stock</span></span></c:if>
+                                <c:if test="${p.PQuantity <= 0}"><span class="availability">Availability: <span style="font-weight: bold; color: red; font-size: 16px;">Out of Stock</span></span></c:if>
 
                                     <div class="quantity-colors">
 
@@ -393,140 +416,179 @@
                         <div class="single-product-tab-content tab-content">
 
                             <div class="tab-pane fade show active" id="product-reviews">
+
                                 <div class="product-ratting-wrap">
-                                    <div class="pro-avg-ratting">
-                                        <div class="col-md-4" style="margin: auto; text-align: center;">
-
-                                            <c:set var="s5" value="${d.countRating(p.productID, 5)}"/>
-                                            <c:set var="s4" value="${d.countRating(p.productID, 4)}"/>
-                                            <c:set var="s3" value="${d.countRating(p.productID, 3)}"/>
-                                            <c:set var="s2" value="${d.countRating(p.productID, 2)}"/>
-                                            <c:set var="s1" value="${d.countRating(p.productID, 1)}"/>
-                                            <c:set var="rate" value="${(s5*5+s4*4+s3*3+s2*2+s1*1)/(s5+s4+s3+s2+s1)}"/>
-                                            <fmt:formatNumber var="rateS" maxFractionDigits="0" value="${rate}"/>
-
-                                            <h4><fmt:formatNumber type = "number" maxFractionDigits="1" value = "${(s5*5+s4*4+s3*3+s2*2+s1*1)/(s5+s4+s3+s2+s1)}" /> / 5<span>(Overall)</span></h4> 
-                                            <div class="ratting-star" style="font-size: 20px; color: #ea9d02;">
-                                                <c:forEach begin="1" end="${rateS}">
-                                                    <i class="fa fa-star"></i>
-                                                </c:forEach>
-                                                <c:forEach begin="${rateS + 1}" end="5">
-                                                    <i class="far fa-star"></i>
-                                                </c:forEach>
-                                                <span style="font-size: 16px;">(${count})</span>
+                                    <c:if test="${count == 0}">
+                                        <div class="center">
+                                            <div class="empty-feedback">
+                                                <img src="assets/images/icons/empty-feedback.png" alt=""/>
+                                                <p>There are no reviews yet</p>
                                             </div>
-                                            <span>Based on ${count} Comments</span>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <div class="rating-progress">
-                                                <label style="all: unset;">5<i class="fa fa-star"></i></label>
-                                                <div class="progress">
-                                                    <div class="progress-bar" role="progressbar" style="width: ${(s5/count)*100}%"></div>
-                                                </div>
-                                                <span style="margin-left: 3px;">${s5}</span>
-                                            </div>
-                                            <div class="rating-progress">
-                                                <label style="all: unset;">4<i class="fa fa-star"></i></label>
-                                                <div class="progress">
-                                                    <div class="progress-bar" role="progressbar" style="width: ${(s4/count)*100}%"></div>
-                                                </div>
-                                                <span style="margin-left: 3px;">${s4}</span>
-                                            </div>
-                                            <div class="rating-progress">
-                                                <label style="all: unset;">3<i class="fa fa-star"></i></label>
-                                                <div class="progress">
-                                                    <div class="progress-bar" role="progressbar" style="width: ${(s3/count)*100}%"></div>
-                                                </div>
-                                                <span style="margin-left: 3px;">${s3}</span>
-                                            </div>
-                                            <div class="rating-progress">
-                                                <label style="all: unset;">2<i class="fa fa-star"></i></label>
-                                                <div class="progress">
-                                                    <div class="progress-bar" role="progressbar" style="width: ${(s2/count)*100}%"></div>
-                                                </div>
-                                                <span style="margin-left: 3px;">${s2}</span>
-                                            </div>
-                                            <div class="rating-progress">
-                                                <label style="all: unset;">1<i class="fa fa-star"></i></label>
-                                                <div class="progress">
-                                                    <div class="progress-bar" role="progressbar" style="width: ${(s1/count)*100}%"></div>
-                                                </div>
-                                                <span style="margin-left: 3px;">${s1}</span>
+                                            <div class="ratting-form-wrapper fix">
+                                                <form action="singleProduct?pid=${pid}" method="post">
+                                                    <div class="ratting-form row" style="padding: 0 50px;">
+                                                        <div class="col-12 mb-15" style="display: flex; align-items: center;">
+                                                            <h5>How many stars do you rate this product?</h5>
+                                                            <div class="star-widget">
+                                                                <input type="radio" name="rate" value="5" id="rate-5">
+                                                                <label for="rate-5" class="fas fa-star"></label>
+                                                                <input type="radio" name="rate" value="4" id="rate-4">
+                                                                <label for="rate-4" class="fas fa-star"></label>
+                                                                <input type="radio" name="rate" value="3" id="rate-3">
+                                                                <label for="rate-3" class="fas fa-star"></label>
+                                                                <input type="radio" name="rate" value="2" id="rate-2">
+                                                                <label for="rate-2" class="fas fa-star"></label>
+                                                                <input type="radio" name="rate" value="1" id="rate-1">
+                                                                <label for="rate-1" class="fas fa-star"></label>
+                                                                <header id="emote" style="position: absolute; left: 80%; font-size: 18px;"></header>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 mb-15">
+                                                            <label for="your-review">Your Review:</label>
+                                                            <textarea name="review" id="your-review" placeholder="Write a review"></textarea>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <input value="add review" type="submit">
+                                                        </div>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
-                                        <div class="col-md-3" style="margin-top: 6px; text-align: center;">
-                                            <span style="font-size: 12px; margin-right: 10px;">Have you used this product?</span>
-                                            <input class="btn btn-primary" type="submit" value="Submit your review" id="feedback-down">
-                                        </div>
-                                    </div>
+                                    </c:if>
+                                    <c:if test="${count >0}">
+                                        <div class="pro-avg-ratting">
+                                            <div class="col-md-4" style="margin: auto; text-align: center;">
 
-                                    <div class="ratting-form-wrapper fix" id="feedback-form">
-                                        <form action="singleProduct?pid=${pid}" method="post">
-                                            <div class="ratting-form row">
-                                                <div class="col-12 mb-15" style="display: flex; align-items: center;">
-                                                    <h5>How many stars do you rate this product?</h5>
-                                                    <div class="star-widget">
-                                                        <input type="radio" name="rate" value="5" id="rate-5">
-                                                        <label for="rate-5" class="fas fa-star"></label>
-                                                        <input type="radio" name="rate" value="4" id="rate-4">
-                                                        <label for="rate-4" class="fas fa-star"></label>
-                                                        <input type="radio" name="rate" value="3" id="rate-3">
-                                                        <label for="rate-3" class="fas fa-star"></label>
-                                                        <input type="radio" name="rate" value="2" id="rate-2">
-                                                        <label for="rate-2" class="fas fa-star"></label>
-                                                        <input type="radio" name="rate" value="1" id="rate-1">
-                                                        <label for="rate-1" class="fas fa-star"></label>
-                                                        <header id="emote" style="position: absolute; left: 80%; font-size: 18px;"></header>
+                                                <c:set var="s5" value="${d.countRating(p.productID, 5)}"/>
+                                                <c:set var="s4" value="${d.countRating(p.productID, 4)}"/>
+                                                <c:set var="s3" value="${d.countRating(p.productID, 3)}"/>
+                                                <c:set var="s2" value="${d.countRating(p.productID, 2)}"/>
+                                                <c:set var="s1" value="${d.countRating(p.productID, 1)}"/>
+                                                <c:set var="rate" value="${(s5*5+s4*4+s3*3+s2*2+s1*1)/(s5+s4+s3+s2+s1)}"/>
+                                                <fmt:formatNumber var="rateS" maxFractionDigits="0" value="${rate}"/>
+
+                                                <h4><fmt:formatNumber type = "number" maxFractionDigits="1" value = "${(s5*5+s4*4+s3*3+s2*2+s1*1)/(s5+s4+s3+s2+s1)}" /> / 5<span>(Overall)</span></h4> 
+                                                <div class="ratting-star" style="font-size: 20px; color: #ea9d02;">
+                                                    <c:forEach begin="1" end="${rateS}">
+                                                        <i class="fa fa-star"></i>
+                                                    </c:forEach>
+                                                    <c:forEach begin="${rateS + 1}" end="5">
+                                                        <i class="far fa-star"></i>
+                                                    </c:forEach>
+                                                    <span style="font-size: 16px;">(${count})</span>
+                                                </div>
+                                                <span>Based on ${count} Comments</span>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="rating-progress">
+                                                    <label>5<i class="fa fa-star"></i></label>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" role="progressbar" style="width: ${(s5/count)*100}%"></div>
+                                                    </div>
+                                                    <span style="margin-left: 3px;">${s5}</span>
+                                                </div>
+                                                <div class="rating-progress">
+                                                    <label>4<i class="fa fa-star"></i></label>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" role="progressbar" style="width: ${(s4/count)*100}%"></div>
+                                                    </div>
+                                                    <span style="margin-left: 3px;">${s4}</span>
+                                                </div>
+                                                <div class="rating-progress">
+                                                    <label>3<i class="fa fa-star"></i></label>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" role="progressbar" style="width: ${(s3/count)*100}%"></div>
+                                                    </div>
+                                                    <span style="margin-left: 3px;">${s3}</span>
+                                                </div>
+                                                <div class="rating-progress">
+                                                    <label>2<i class="fa fa-star"></i></label>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" role="progressbar" style="width: ${(s2/count)*100}%"></div>
+                                                    </div>
+                                                    <span style="margin-left: 3px;">${s2}</span>
+                                                </div>
+                                                <div class="rating-progress">
+                                                    <label>1<i class="fa fa-star"></i></label>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" role="progressbar" style="width: ${(s1/count)*100}%"></div>
+                                                    </div>
+                                                    <span style="margin-left: 3px;">${s1}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3" style="margin-top: 6px; text-align: center;">
+                                                <span style="font-size: 12px; margin-right: 10px;">Have you used this product?</span>
+                                                <input class="btn btn-primary" type="submit" value="Submit your review" id="feedback-down">
+                                            </div>
+                                        </div>
+
+                                        <div class="ratting-form-wrapper fix" id="feedback-form">
+                                            <form action="singleProduct?pid=${pid}" method="post">
+                                                <div class="ratting-form row" onclick="warningLogin()">
+                                                    <div class="col-12 mb-15" style="display: flex; align-items: center;">
+                                                        <h5>How many stars do you rate this product?</h5>
+                                                        <div class="star-widget">
+                                                            <input type="radio" name="rate" value="5" id="rate-5">
+                                                            <label for="rate-5" class="fas fa-star"></label>
+                                                            <input type="radio" name="rate" value="4" id="rate-4">
+                                                            <label for="rate-4" class="fas fa-star"></label>
+                                                            <input type="radio" name="rate" value="3" id="rate-3">
+                                                            <label for="rate-3" class="fas fa-star"></label>
+                                                            <input type="radio" name="rate" value="2" id="rate-2">
+                                                            <label for="rate-2" class="fas fa-star"></label>
+                                                            <input type="radio" name="rate" value="1" id="rate-1">
+                                                            <label for="rate-1" class="fas fa-star"></label>
+                                                            <header id="emote" style="position: absolute; left: 80%; font-size: 18px;"></header>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 mb-15">
+                                                        <label for="your-review">Your Review:</label>
+                                                        <textarea name="review" id="your-review" placeholder="Write a review"></textarea>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label id="warning-login" style="display: flex; margin-bottom: 14px;"></label>
+                                                        <input value="add review" type="submit">
                                                     </div>
                                                 </div>
-                                                <div class="col-12 mb-15">
-                                                    <label for="your-review">Your Review:</label>
-                                                    <textarea name="review" id="your-review" placeholder="Write a review"></textarea>
-                                                </div>
-                                                <div class="col-12">
-                                                    <input value="add review" type="submit">
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    <div class="rattings-wrapper">
-                                        <c:forEach items="${listF}" var="o">
-                                            <div class="sin-rattings">
-                                                <div class="ratting-author" style="display: flex; align-items: center;">
-                                                    <c:set value="${d.findAccount(o.userID)}" var="user"/>
-                                                    <h3>${user.fullName}</h3>
-                                                    <div class="ratting-star">
-                                                        <c:forEach begin="1" end="${o.rating}">
-                                                            <i class="fa fa-star"></i>
-                                                        </c:forEach>
-                                                        <c:forEach begin="${o.rating + 1}" end="5">
-                                                            <i class="far fa-star"></i>
-                                                        </c:forEach>
-                                                    </div>
-                                                    <p class="date-cmt" style="color: #99a2aa; font-size: 14px;">${o.FDateFormat}</p>
-                                                </div>
-                                                <p>${o.description}</p>
-                                            </div>
-                                        </c:forEach>
-                                    </div>
-                                    <div class="row mt-30">
-                                        <div class="col">
-                                            <c:if test="${end != null}">
-                                                <ul class="pagination">
-                                                    <li class="${indexPage>1?"":"disabled"}"><a href="singleProduct?pid=${pid}&index=${indexPage-1}"><i class="fa fa-angle-left"></i>Back</a></li>
-                                                        <c:forEach begin="1" end="${end}" var="i">
-                                                        <li class="${tag == i?"active":""}"><a href="singleProduct?pid=${pid}&index=${i}">${i}</a></li>
-                                                        </c:forEach>
-                                                    <li class="${indexPage<end?"":"disabled"}"><a href="singleProduct?pid=${pid}&index=${indexPage+1}">Next<i class="fa fa-angle-right"></i></a></li>
-                                                </ul>
-                                            </c:if>
+                                            </form>
                                         </div>
-                                    </div>
 
+                                        <div class="rattings-wrapper">
+                                            <c:forEach items="${listF}" var="o">
+                                                <div class="sin-rattings">
+                                                    <div class="ratting-author" style="display: flex; align-items: center;">
+                                                        <c:set value="${d.findAccount(o.userID)}" var="user"/>
+                                                        <h3>${user.fullName}</h3>
+                                                        <div class="ratting-star">
+                                                            <c:forEach begin="1" end="${o.rating}">
+                                                                <i class="fa fa-star"></i>
+                                                            </c:forEach>
+                                                            <c:forEach begin="${o.rating + 1}" end="5">
+                                                                <i class="far fa-star"></i>
+                                                            </c:forEach>
+                                                        </div>
+                                                        <p class="date-cmt" style="color: #99a2aa; font-size: 14px;">${o.FDateFormat}</p>
+                                                    </div>
+                                                    <p>${o.description}</p>
+                                                </div>
+                                            </c:forEach>
+                                        </div>
 
+                                        <div class="row mt-30">
+                                            <div class="col">
+                                                <c:if test="${end != null}">
+                                                    <ul class="pagination">
+                                                        <li class="${indexPage>1?"":"disabled"}"><a href="singleProduct?pid=${pid}&index=${indexPage-1}"><i class="fa fa-angle-left"></i>Back</a></li>
+                                                            <c:forEach begin="1" end="${end}" var="i">
+                                                            <li class="${tag == i?"active":""}"><a href="singleProduct?pid=${pid}&index=${i}">${i}</a></li>
+                                                            </c:forEach>
+                                                        <li class="${indexPage<end?"":"disabled"}"><a href="singleProduct?pid=${pid}&index=${indexPage+1}">Next<i class="fa fa-angle-right"></i></a></li>
+                                                    </ul>
+                                                </c:if>
+                                            </div>
+                                        </div>
+                                    </c:if>
                                 </div>
-
                             </div>
                             <div class="tab-pane fade" id="product-specifications">
                                 <div class="single-product-specification">
@@ -662,7 +724,9 @@
 
                                 <div class="row">
                                     <div class="single-product-description-content col-lg-12 col-12">
-                                        <p>${p.description}</p>
+                                        <c:forTokens items="${p.description}" delims="|" var="splitDes">
+                                            <li class="mb-3"><c:out value="${splitDes}"/><br></li>
+                                            </c:forTokens>
                                     </div>
                                 </div>
 
@@ -699,24 +763,27 @@
                                         <!-- Image -->
                                         <div class="image">
                                             <span class="label sale"><i>-${o.discountPercent}%</i></span>
-                                            <a href="single-product.html" class="img"><img src="assets/images/products/${o.image1}" alt="Product Image"></a>
+                                            <a href="singleProduct?pid=${o.productID}" class="img"><img src="assets/images/products/${o.image1}" alt="Product Image"></a>
 
                                             <div class="wishlist-compare">
                                                 <a href="#" data-tooltip="Compare"><i class="ti-control-shuffle"></i></a>
                                                 <a href="#" data-tooltip="Wishlist"><i class="ti-heart"></i></a>
                                             </div>
 
-                                            <a href="shoppingCart?id=${o.productID}&action=ordernow" class="add-to-cart"><i class="ti-shopping-cart"></i><span>ADD TO CART</span></a>
+                                            <c:if test="${o.PQuantity > 0}"><span class="availability" style="background: #5ac478;">In Stock</span></c:if>
+                                            <c:if test="${o.PQuantity <= 0}"><span class="availability" style="background: #ed1d24;">Out of Stock</span></c:if>
 
-                                        </div>
+                                            <c:if test="${o.PQuantity > 0}"><a href="#" onclick="addToCart(${o.productID})" class="add-to-cart"><i class="ti-shopping-cart"></i><span>ADD TO CART</span></a></c:if>
 
-                                        <!-- Content -->
-                                        <div class="content">
+                                            </div>
 
-                                            <!-- Category & Title -->
-                                            <div class="category-title">
+                                            <!-- Content -->
+                                            <div class="content">
 
-                                                <a href="#" class="cat">${c.categoryName}</a>
+                                                <!-- Category & Title -->
+                                                <div class="category-title">
+
+                                                    <a href="#" class="cat">${c.categoryName}</a>
                                                 <h5 class="title"><a href="single-product.html">${o.productName}</a></h5>
 
                                             </div>
@@ -740,62 +807,63 @@
                                                         <i class="far fa-star"></i>
                                                     </c:forEach>
                                                 </div>
-
                                             </div>
-
                                         </div>
-
-                                    </div><!-- Product End -->
+                                    </div>
                                 </div>
                             </c:forEach>
-
-                        </div><!-- Product Slider End -->
-                    </div><!-- Product Tab Content End -->
-
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div><!-- Related Product Section End -->
+        </div>
 
         <jsp:include page="footer.jsp"></jsp:include>
-            <script src="assets/js/vendor/jquery-1.12.4.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+            <script src="assets/js/popper.min.js"></script>
+            <script src="assets/js/bootstrap.min.js"></script>
+            <script src="assets/js/plugins.js"></script>
+            <script src="assets/js/slick.min.js" type="text/javascript"></script>
+            <script src="assets/js/nouislider.min.js" type="text/javascript"></script>
+            <script src="assets/js/jquery.zoom.min.js" type="text/javascript"></script>
+            <script src="assets/js/main.js" type="text/javascript"></script>
             <script>
-                                        $(document).ready(function () {
-                                            $("#feedback-down").click(function () {
-                                                $("#feedback-form").slideDown("slow");
-                                            });
-                                        });
-                                        function addToCart(pid) {
-                                            if (${sessionScope.acc == null}) {
-                                                window.location.assign('login');
-                                            } else {
-                                                $.ajax({
-                                                    url: "/Project/shoppingCart",
-                                                    type: "GET",
-                                                    data: {
-                                                        action: 'ordernow',
-                                                        id: pid
-                                                    },
-                                                    success: function (data) {
-                                                        $(".header-shop-links").html(data);
-                                                    },
-                                                    error: function (xhr) {
-                                                        //Do Something to handle error
-                                                    }
+                                                $(document).ready(function () {
+                                                    $("#feedback-down").click(function () {
+                                                        $("#feedback-form").slideToggle("slow");
+                                                    });
                                                 });
-                                            }
-                                        }
+
+                                                function addToCart(pid) {
+                                                    if (${sessionScope.acc == null}) {
+                                                        window.location.assign('login?url=${url}');
+                                                    } else {
+                                                        $.ajax({
+                                                            url: "shoppingCart",
+                                                            type: "GET",
+                                                            data: {
+                                                                action: 'ordernow',
+                                                                id: pid
+                                                            },
+                                                            success: function (data) {
+                                                                $(".header-shop-links").html(data);
+                                                            },
+                                                            error: function (xhr) {
+                                                                //Do Something to handle error
+                                                            }
+                                                        });
+                                                    }
+                                                }
+
+                                                function warningLogin() {
+                                                    if (${sessionScope.acc == null}) {
+                                                        document.getElementById("warning-login").innerHTML = '<img src="assets/images/icons/alert-icon-red-11.png" alt="warnning" style="max-width: 26px;"><p>Please login before rating!</p>'
+                                                    } else {
+
+                                                    }
+                                                }
         </script>
 
-        <script src="assets/js/popper.min.js"></script>
-        <!-- Bootstrap JS -->
-        <script src="assets/js/bootstrap.min.js"></script>
-        <!-- Plugins JS -->
-        <script src="assets/js/plugins.js"></script>
-        <script src="assets/js/slick.min.js" type="text/javascript"></script>
-        <script src="assets/js/nouislider.min.js" type="text/javascript"></script>
-        <script src="assets/js/jquery.zoom.min.js" type="text/javascript"></script>
-        <!-- Main JS -->
-        <script src="assets/js/main.js" type="text/javascript"></script>
     </body>
 
 </html>

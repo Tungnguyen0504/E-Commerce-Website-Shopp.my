@@ -99,7 +99,10 @@
         <jsp:include page="header.jsp"></jsp:include>
         <jsp:useBean scope="page" id="d" class="dao.AllDao"/>
         <c:set value="${d.getCategoryByID(cid)}" var="c"/>
-
+        <%
+            String rq = "http://localhost:8080" + request.getContextPath().toString();
+            request.setAttribute("rq", rq);
+        %>
         <!-- Page Banner Section Start -->
         <div class="page-banner-section section">
             <div class="page-banner-wrap row row-0 d-flex align-items-center ">
@@ -117,7 +120,6 @@
                     </div>
                 </div>
                 <!-- Banner -->
-
             </div>
         </div><!-- Page Banner Section End -->
         <div id="breadcrumb" class="section">
@@ -215,55 +217,44 @@
                         <div class="aside" style="margin-bottom: 35px;">
                             <h3 class="aside-title">Price:</h3>
                             <div class="checkbox-filter">
-                                <div class="input-checkbox">
-                                    <input ${st == "1"?"checked":""} onclick='window.location.assign("/Project/category?id=${cid}&st=1")' type="checkbox" name="check" style="width: 14px; height: 14px;">
+                                <div class="input-checkbox" onclick='window.location.assign("${rq}/category?id=${cid}&st=1")'>
+                                    <input ${st == "1"?"checked":""} type="checkbox" name="check" style="width: 14px; height: 14px;">
                                     <label style="font-size: 17px;">All</label>
                                 </div>
-                                <div class="input-checkbox">
-                                    <input ${st == "2"?"checked":""} onclick='window.location.assign("/Project/filterShop?action=filterPrice&id=${cid}&max=500&st=2")' type="checkbox" name="check" style="width: 14px; height: 14px;">
+                                <div class="input-checkbox" onclick='window.location.assign("${rq}/filterShop?action=filterPrice&id=${cid}&max=500&st=2")'>
+                                    <input ${st == "2"?"checked":""} type="checkbox" name="check" style="width: 14px; height: 14px;">
                                     <label style="font-size: 17px;">Under 500$</label>
                                 </div>
-                                <div class="input-checkbox">
-                                    <input ${st == "3"?"checked":""} onclick='window.location.assign("/Project/filterShop?action=filterPrice&id=${cid}&min=500&max=750&st=3")' type="checkbox" name="check" style="width: 14px; height: 14px;">
+                                <div class="input-checkbox" onclick='window.location.assign("${rq}/filterShop?action=filterPrice&id=${cid}&min=500&max=750&st=3")'>
+                                    <input ${st == "3"?"checked":""} type="checkbox" name="check" style="width: 14px; height: 14px;">
                                     <label style="font-size: 17px;">500$ to 750$</label>
                                 </div>
-                                <div class="input-checkbox">
-                                    <input ${st == "4"?"checked":""} onclick='window.location.assign("/Project/filterShop?action=filterPrice&id=${cid}&min=750&max=1000&st=4")' type="checkbox" name="check" style="width: 14px; height: 14px;">
+                                <div class="input-checkbox" onclick='window.location.assign("${rq}/filterShop?action=filterPrice&id=${cid}&min=750&max=1000&st=4")'>
+                                    <input ${st == "4"?"checked":""} type="checkbox" name="check" style="width: 14px; height: 14px;">
                                     <label style="font-size: 17px;">750$ to 1000$</label>
                                 </div>
-                                <div class="input-checkbox">
-                                    <input ${st == "5"?"checked":""} onclick='window.location.assign("/Project/filterShop?action=filterPrice&id=${cid}&min=1000&max=1250&st=5")' type="checkbox" name="check" style="width: 14px; height: 14px;">
+                                <div class="input-checkbox" onclick='window.location.assign("${rq}/filterShop?action=filterPrice&id=${cid}&min=1000&max=1250&st=5")'>
+                                    <input ${st == "5"?"checked":""} type="checkbox" name="check" style="width: 14px; height: 14px;">
                                     <label style="font-size: 17px;">1000$ to 1250$</label>
                                 </div>
-                                <div class="input-checkbox">
-                                    <input ${st == "6"?"checked":""} onclick='window.location.assign("/Project/filterShop?action=filterPrice&id=${cid}&min=1250&max=1500&st=6")' type="checkbox" name="check" style="width: 14px; height: 14px;">
+                                <div class="input-checkbox" onclick='window.location.assign("${rq}/filterShop?action=filterPrice&id=${cid}&min=1250&max=1500&st=6")'>
+                                    <input ${st == "6"?"checked":""} type="checkbox" name="check" style="width: 14px; height: 14px;">
                                     <label style="font-size: 17px;">1250$ to 1500$</label>
                                 </div>
-                                <div class="input-checkbox">
-                                    <input ${st == "7"?"checked":""} onclick='window.location.assign("/Project/filterShop?action=filterPrice&id=${cid}&min=1500&st=7")' type="checkbox" name="check" style="width: 14px; height: 14px;">
+                                <div class="input-checkbox" onclick='window.location.assign("${rq}/filterShop?action=filterPrice&id=${cid}&min=1500&st=7")'>
+                                    <input ${st == "7"?"checked":""} type="checkbox" name="check" style="width: 14px; height: 14px;">
                                     <label style="font-size: 17px;">1500$ and Above</label>
                                 </div>
                             </div>
                         </div>
-                        <!-- /aside Widget -->
 
-                        <!-- aside Widget -->
                         <div class="aside" style="margin-bottom: 30px;">
                             <h3 class="aside-title">Brand</h3>
                             <div class="checkbox-filter">
                                 <c:forEach items="${listB}" var="br">
-                                    <div class="input-checkbox">
-                                        <c:if test="${cid == 1}">
-                                            <input ${br.bname==brand?"checked":""} onclick='window.location.assign("/Project/viewProductByBrand?brand=${br.bname}&id=${br.bid}")' type="checkbox" id="brand-1" style="width: 14px; height: 14px;">
-                                        </c:if>
-                                        <c:if test="${cid == 2}">
-                                            <input ${br.bname==brand?"checked":""} onclick='window.location.assign("/Project/viewProductByBrand?brand=${br.bname}&id=${br.bid}")' type="checkbox" id="brand-1" style="width: 14px; height: 14px;">
-                                        </c:if>
-                                        <c:if test="${cid == 3}">
-                                            <input ${br.bname==brand?"checked":""} onclick='window.location.assign("/Project/viewProductByBrand?brand=${br.bname}&id=${br.bid}")' type="checkbox" id="brand-1" style="width: 14px; height: 14px;">
-                                        </c:if>
-                                        <label for="brand-1" style="font-size: 17px;">
-                                            <span></span>
+                                    <div class="input-checkbox" onclick='window.location.assign("${rq}/viewProductByBrand?brand=${br.bname}&id=${br.bid}")'>
+                                        <input ${br.bname==brand?"checked":""} type="checkbox" id="brand-1" style="width: 14px; height: 14px;">
+                                        <label style="font-size: 17px;">
                                             ${br.bname}
                                         </label>
                                     </div>
@@ -316,7 +307,7 @@
                                             <a href="#" data-tooltip="Wishlist"><i class="ti-heart"></i></a>
                                         </div>
                                         <c:if test="${o.PQuantity > 0}"><span class="availability" style="background: #5ac478;">In Stock</span></c:if>
-                                        <c:if test="${o.PQuantity <= 0}"><span class="availability" style="background: #c88956;">Out of Stock</span></c:if>
+                                        <c:if test="${o.PQuantity <= 0}"><span class="availability" style="background: #ed1d24;">Out of Stock</span></c:if>
 
                                         <c:if test="${o.PQuantity > 0}"><a href="#" onclick="addToCart(${o.productID})" class="add-to-cart"><i class="ti-shopping-cart"></i><span>ADD TO CART</span></a></c:if>
                                         </div>
@@ -331,25 +322,27 @@
 
                                         <!-- Price & Ratting -->
                                         <div class="price-ratting">
-                                            
+
                                             <h5 class="price"><span class="old">$${o.price}</span>$${o.priceDiscount}</h5>
-                                            
+
                                             <c:set var="s5" value="${d.countRating(o.productID, 5)}"/>
                                             <c:set var="s4" value="${d.countRating(o.productID, 4)}"/>
                                             <c:set var="s3" value="${d.countRating(o.productID, 3)}"/>
                                             <c:set var="s2" value="${d.countRating(o.productID, 2)}"/>
                                             <c:set var="s1" value="${d.countRating(o.productID, 1)}"/>
-                                            <c:set var="rate" value="${(s5*5+s4*4+s3*3+s2*2+s1*1)/(s5+s4+s3+s2+s1)}"/>
-                                            <fmt:formatNumber var="rateS" maxFractionDigits="0" value="${rate}"/>
-                                            <div class="ratting">
-                                                <c:forEach begin="1" end="${rateS}">
-                                                    <i class="fa fa-star"></i>
-                                                </c:forEach>
-                                                <c:forEach begin="${rateS + 1}" end="5">
-                                                    <i class="far fa-star"></i>
-                                                </c:forEach>
-                                            </div>
 
+                                            <c:if test="${s5 != 0 || s4 != 0 || s3 != 0 || s2 != 0 || s1 != 0}">
+                                                <c:set var="rate" value="${(s5*5+s4*4+s3*3+s2*2+s1*1)/(s5+s4+s3+s2+s1)}"/>
+                                                <fmt:formatNumber var="rateS" maxFractionDigits="0" value="${rate}"/>
+                                                <div class="ratting">
+                                                    <c:forEach begin="1" end="${rateS}">
+                                                        <i class="fa fa-star"></i>
+                                                    </c:forEach>
+                                                    <c:forEach begin="${rateS + 1}" end="5">
+                                                        <i class="far fa-star"></i>
+                                                    </c:forEach>
+                                                </div>
+                                            </c:if>
                                         </div>
 
                                     </div>
@@ -472,10 +465,10 @@
             <script>
                 function addToCart(pid) {
                     if (${sessionScope.acc == null}) {
-                        window.location.assign('login');
+                        window.location.assign('login?url=${url}');
                     } else {
                         $.ajax({
-                            url: "/Project/shoppingCart",
+                            url: "shoppingCart",
                             type: "GET",
                             data: {
                                 action: 'ordernow',

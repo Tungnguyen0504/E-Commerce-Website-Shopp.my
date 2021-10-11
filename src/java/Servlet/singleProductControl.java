@@ -6,6 +6,8 @@
 package Servlet;
 
 import dao.AllDao;
+import dao.paggingDAO;
+import generic.getUrl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
@@ -30,14 +32,6 @@ import model.User;
 @WebServlet(name = "singleProductControl", urlPatterns = {"/singleProduct"})
 public class singleProductControl extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -55,27 +49,12 @@ public class singleProductControl extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String action = request.getParameter("action");
-        if (action == null) {
-            doGet_load(request, response);
-        }
-    }
-
     protected void doGet_load(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        getUrl.getUrl(request, response);
         String indexPage = request.getParameter("index");
         AllDao dao = new AllDao();
+        paggingDAO dao2 = new paggingDAO();
 
         int pid = Integer.parseInt(request.getParameter("pid"));
         Products p = dao.getProductByID(pid);
@@ -86,7 +65,7 @@ public class singleProductControl extends HttpServlet {
         int cid = p.getCategoryID();
         List<Products> listRelate = dao.getRelateProduct(cid);
 
-        int count = dao.countAllFeedbackByPid(pid);
+        int count = dao2.countAllFeedbackByPid(pid);
         int endPage = count / 5;
         if (count % 5 != 0) {
             endPage++;
@@ -95,29 +74,7 @@ public class singleProductControl extends HttpServlet {
             indexPage = "1";
         }
         int index = Integer.parseInt(indexPage);
-        List<Feedback> listF = dao.PaggingAllFeedbackByPid(pid, index);
-
-        List<Feedback> list = dao.getAllFeedbackByPid(pid);
-
-//        int s5, s4, s3, s2, s1;
-//        s5 = s4 = s3 = s2 = s1 = 0;
-//        for (int i = 0; i < list.size(); i++) {
-//            if (list.get(i).getRating() == 5) {
-//                s5++;
-//            }
-//            if (list.get(i).getRating() == 4) {
-//                s4++;
-//            }
-//            if (list.get(i).getRating() == 3) {
-//                s3++;
-//            }
-//            if (list.get(i).getRating() == 2) {
-//                s2++;
-//            }
-//            if (list.get(i).getRating() == 1) {
-//                s1++;
-//            }
-//        }
+        List<Feedback> listF = dao2.PaggingAllFeedbackByPid(pid, index);
 
         request.setAttribute("pid", pid);
         request.setAttribute("p", p);
@@ -134,15 +91,23 @@ public class singleProductControl extends HttpServlet {
         request.getRequestDispatcher("single-product.jsp").forward(request, response);
     }
 
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
+        if (action == null) {
+            doGet_load(request, response);
+        }
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         User u = (User) session.getAttribute("acc");
         if (u == null) {
-//            String url = request.getRequestURI() + "?" + request.getQueryString();
-//            request.setAttribute("url", url);
-//            request.getRequestDispatcher("login.jsp").forward(request, response);
-            response.sendRedirect("login");
+            getUrl.getUrl(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
             int pid = Integer.parseInt(request.getParameter("pid"));
             int uid = u.getUserID();
@@ -157,11 +122,6 @@ public class singleProductControl extends HttpServlet {
         }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

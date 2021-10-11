@@ -8,12 +8,9 @@ package Servlet;
 import dao.AllDao;
 import dao.orderDAO;
 import dao.orderDetailDAO;
-import dao.userDAO;
+import generic.getUrl;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.Coupon;
 import model.Item;
 import model.Order;
 import model.OrderDetails;
@@ -48,25 +46,27 @@ public class checkoutControl extends HttpServlet {
         HttpSession session = request.getSession();
         User u = (User) session.getAttribute("acc");
         if (u == null) {
-           String url = request.getRequestURI() + "?" + request.getQueryString();
-            request.setAttribute("url", url);
+            getUrl.getUrl(request, response);
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
             if (action.equalsIgnoreCase("checkout")) {
                 request.getRequestDispatcher("checkout.jsp").forward(request, response);
             }
             if (action.equalsIgnoreCase("saveorder")) {
-                String uid = request.getParameter("uid");
+                int uid = Integer.parseInt(request.getParameter("uid"));
                 String userName = request.getParameter("userName");
                 String password = request.getParameter("password");
-                String isAdmin = request.getParameter("isAdmin");
+                boolean isAdmin = u.isIsAdmin();
+                boolean isActive = u.isIsActive();
+                String image = u.getImage();
                 String fullName = request.getParameter("fullName");
                 String email = request.getParameter("email");
                 String phone = request.getParameter("phone");
                 String address = request.getParameter("address");
                 String city = request.getParameter("city");
+                User user = new User(uid, userName, password, isAdmin, isActive, image, fullName, email, address, city, phone);
                 AllDao dao = new AllDao();
-                dao.updateAccount(userName, password, isAdmin, fullName, email, address, city, phone, uid);
+                dao.updateAccount(user);
 
                 Order order = new Order();
                 List<Item> cart = (List<Item>) session.getAttribute("cart");
@@ -75,11 +75,15 @@ public class checkoutControl extends HttpServlet {
                 for (int i = 0; i < cart.size(); i++) {
                     price += cart.get(i).getQuantity() * cart.get(i).getP().getPriceDiscount();
                 }
+
+                Coupon cou = (Coupon) session.getAttribute("coupon");
+                if (cou != null) {
+                    price = price - price * cou.getDiscountPercent() / 100;
+                }
                 if (cart.size() > 0) {
-                    int userID = Integer.parseInt(uid);
                     long millis = System.currentTimeMillis();
                     Timestamp orderDate = new Timestamp(millis);
-                    order.setUserID(userID);
+                    order.setUserID(uid);
                     order.setOrderDate(orderDate);
                     order.setPayment(request.getParameter("payment-method"));
                     order.setTotal(price);

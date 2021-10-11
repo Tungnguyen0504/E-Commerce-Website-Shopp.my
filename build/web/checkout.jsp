@@ -137,54 +137,66 @@
                                                 <c:set var="s" value="0"></c:set>
                                                 <c:forEach var="o" items="${sessionScope.cart}">
                                                     <c:set var="s" value="${s + o.p.priceDiscount * o.quantity}"></c:set>
-                                                    <ul><li>${o.p.productName} X ${o.quantity}<span><fmt:setLocale value = "en_US"/><fmt:formatNumber value="${o.p.priceDiscount * o.quantity}" type="currency"/></span></li></ul>
-                                                        </c:forEach>
-                                                <p>Sub Total <span><fmt:setLocale value = "en_US"/><fmt:formatNumber value="${s}" type="currency"/></span></p>
-                                                    <p>Shipping Fee <span>$00.00</span></p>
+                                                        <ul>
+                                                            <li>${o.p.productName} X ${o.quantity}</li>
+                                                        <span style="margin-left: auto;"><fmt:setLocale value = "en_US"/><fmt:formatNumber value="${o.p.priceDiscount * o.quantity}" type="currency"/></span>
+                                                    </ul>
+                                                </c:forEach>
 
-                                                    <h4>Grand Total <span><fmt:setLocale value = "en_US"/><fmt:formatNumber value="${s}" type="currency"/></span></h4>
+                                                <c:if test="${sessionScope.coupon != null}">
+                                                    <c:set value="${sessionScope.coupon.discountPercent}" var="discount"/>
+                                                </c:if>
+                                                <c:if test="${sessionScope.coupon == null}">
+                                                    <c:set value="${0}" var="discount"/>
+                                                </c:if>
+
+                                                <p>Sub Total <span><fmt:setLocale value = "en_US"/><fmt:formatNumber value="${s}" type="currency"/></span></p>
+                                                <p>Discount <span><fmt:setLocale value = "en_US"/><fmt:formatNumber value="${s*discount/100}" type="currency"/></span></p>
+                                                <p>Shipping Fee <span>$00.00</span></p>
+
+                                                <h4>Grand Total <span><fmt:setLocale value = "en_US"/><fmt:formatNumber value="${s-s*discount/100}" type="currency"/></span></h4>
+                                            </div>
+
+                                        </div>
+
+                                        <!-- Payment Method -->
+                                        <div class="col-12 mb-60">
+
+                                            <h4 class="checkout-title">Payment Method</h4>
+
+                                            <div class="checkout-payment-method">
+
+                                                <div class="single-method">
+                                                    <input type="radio" id="payment_check" name="payment-method" value="Cheque Payment" required>
+                                                    <label for="payment_check">Cheque Payment</label>
+                                                    <p data-method="check">Please send a Check to Store name with Store Street, Store Town, Store State, Store Postcode, Store Country.</p>
+                                                </div>
+
+                                                <div class="single-method">
+                                                    <input type="radio" id="payment_bank" name="payment-method" value="Direct Bank Transfer">
+                                                    <label for="payment_bank">Direct Bank Transfer</label>
+                                                    <p data-method="bank">Please send a Check to Store name with Store Street, Store Town, Store State, Store Postcode, Store Country.</p>
+                                                </div>
+
+                                                <div class="single-method">
+                                                    <input type="radio" id="payment_paypal" name="payment-method" value="Paypal System">
+                                                    <label for="payment_paypal">Paypal System</label>
+                                                    <p data-method="bank">Please send a Check to Store name with Store Street, Store Town, Store State, Store Postcode, Store Country.</p>
+                                                </div>
+
+                                                <div class="single-method">
+                                                    <input type="radio" id="payment_cash" name="payment-method" value="Cash on Delivery">
+                                                    <label for="payment_cash">Cash on Delivery</label>
+                                                    <p data-method="cash">Please send a Check to Store name with Store Street, Store Town, Store State, Store Postcode, Store Country.</p>
+                                                </div>
+                                                <div class="single-method">
+                                                    <input type="checkbox" id="accept_terms" required>
+                                                    <label for="accept_terms">I’ve read and accept the terms & conditions</label>
                                                 </div>
 
                                             </div>
 
-                                            <!-- Payment Method -->
-                                            <div class="col-12 mb-60">
-
-                                                <h4 class="checkout-title">Payment Method</h4>
-
-                                                <div class="checkout-payment-method">
-
-                                                    <div class="single-method">
-                                                        <input type="radio" id="payment_check" name="payment-method" value="Cheque Payment" required>
-                                                        <label for="payment_check">Cheque Payment</label>
-                                                        <p data-method="check">Please send a Check to Store name with Store Street, Store Town, Store State, Store Postcode, Store Country.</p>
-                                                    </div>
-
-                                                    <div class="single-method">
-                                                        <input type="radio" id="payment_bank" name="payment-method" value="Direct Bank Transfer">
-                                                        <label for="payment_bank">Direct Bank Transfer</label>
-                                                        <p data-method="bank">Please send a Check to Store name with Store Street, Store Town, Store State, Store Postcode, Store Country.</p>
-                                                    </div>
-
-                                                    <div class="single-method">
-                                                        <input type="radio" id="payment_paypal" name="payment-method" value="Paypal System">
-                                                        <label for="payment_paypal">Paypal System</label>
-                                                        <p data-method="bank">Please send a Check to Store name with Store Street, Store Town, Store State, Store Postcode, Store Country.</p>
-                                                    </div>
-
-                                                    <div class="single-method">
-                                                        <input type="radio" id="payment_cash" name="payment-method" value="Cash on Delivery">
-                                                        <label for="payment_cash">Cash on Delivery</label>
-                                                        <p data-method="cash">Please send a Check to Store name with Store Street, Store Town, Store State, Store Postcode, Store Country.</p>
-                                                    </div>
-                                                    <div class="single-method">
-                                                        <input type="checkbox" id="accept_terms" required>
-                                                        <label for="accept_terms">I’ve read and accept the terms & conditions</label>
-                                                    </div>
-                                                  
-                                                </div>
-
-                                                <input type="hidden" name="uid" value="${sessionScope.acc.userID}">
+                                            <input type="hidden" name="uid" value="${sessionScope.acc.userID}">
                                             <button class="place-order">Place order</button>
 
                                         </div>

@@ -37,6 +37,7 @@ public class successControl extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         session.removeAttribute("cart");
+        session.removeAttribute("coupon");
         request.getRequestDispatcher("home").forward(request, response);
     }
 

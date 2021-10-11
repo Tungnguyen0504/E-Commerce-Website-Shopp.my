@@ -244,6 +244,14 @@
                 cursor: default;
                 opacity: 0.6;
             }
+            .shopping-now a {
+                margin-top: 6px;
+                padding: 10px 65px;
+                font-size: 20px;
+                border-radius: 10px;
+                font-weight: 500;
+                font-family: Arial,Helvetica,sans-serif;
+            }
         </style>
         <script>
             $(document).ready(function () {
@@ -277,9 +285,9 @@
             <div class="container-xl">
                 <div class="table-responsive">
                 <c:if test="${listOd.size() == 0}">
-                    <div class="shopping-now" style="text-align: center;">
+                    <div class="shopping-now pb-50 pt-50" style="text-align: center;">
                         <i class="fas fa-cart-arrow-down" style="color: red; font-size: 100px;"></i><br><br>
-                        <label style="font-size: 26px; font-family: auto;">There are no products in the cart</label><br>
+                        <label style="font-size: 26px; font-family: auto;">You haven't bought anything yet</label><br>
                         <a href="category?id=1" class="btn btn-primary" role="button">Shopping Now</a>
                     </div>
                 </c:if>
@@ -331,7 +339,7 @@
                                     <tr>
                                         <td style="text-align: left; display: flex; vertical-align: middle;">
                                             <div><img src="assets/images/products/${od.p.image1}" class="avatar" alt="Avatar" style="width: 75px;"></div>
-                                            <div style=" display: flex; flex-direction: column; justify-content: center;"><a href="#">${od.p.productName}</a></div>
+                                            <div style=" display: flex; flex-direction: column; justify-content: center;"><a href="singleProduct?pid=${od.p.productID}">${od.p.productName}</a></div>
                                         </td>
                                         <td>${od.od.odQuantity}</td>
                                         <td>${od.o.orderDateFormat}</td>   
@@ -353,11 +361,20 @@
                             <c:if test="${end == null}"></c:if>
                             <c:if test="${end != null}">
                                 <ul class="pagination">
-                                    <li class="page-item ${indexPage>1?"":"disabled"}"><a href="orderHistory?index=${indexPage-1}&uid=${sessionScope.acc.userID}">Previous</a></li>
-                                        <c:forEach begin="1" end="${end}" var="i">
-                                        <li class="page-item ${tag == i?"active":""}"><a href="orderHistory?index=${i}&uid=${sessionScope.acc.userID}" class="page-link">${i}</a></li>
-                                        </c:forEach>
-                                    <li class="page-item ${indexPage<end?"":"disabled"}"><a href="orderHistory?index=${indexPage+1}&uid=${sessionScope.acc.userID}" class="page-link">Next</a></li>
+                                    <c:if test="${txtH == null}">
+                                        <li class="page-item ${indexPage>1?"":"disabled"}"><a href="orderHistory?index=${indexPage-1}&uid=${sessionScope.acc.userID}">Previous</a></li>
+                                            <c:forEach begin="1" end="${end}" var="i">
+                                            <li class="page-item ${tag == i?"active":""}"><a href="orderHistory?index=${i}&uid=${sessionScope.acc.userID}" class="page-link">${i}</a></li>
+                                            </c:forEach>
+                                        <li class="page-item ${indexPage<end?"":"disabled"}"><a href="orderHistory?index=${indexPage+1}&uid=${sessionScope.acc.userID}" class="page-link">Next</a></li>
+                                        </c:if>
+                                        <c:if test="${txtH != null}">
+                                        <li class="page-item ${indexPage>1?"":"disabled"}"><a href="filterOrderHistory?index=${indexPage-1}&uid=${sessionScope.acc.userID}&name=${txtH}">Previous</a></li>
+                                            <c:forEach begin="1" end="${end}" var="i">
+                                            <li class="page-item ${tag == i?"active":""}"><a href="filterOrderHistory?index=${i}&uid=${sessionScope.acc.userID}&name=${txtH}" class="page-link">${i}</a></li>
+                                            </c:forEach>
+                                        <li class="page-item ${indexPage<end?"":"disabled"}"><a href="filterOrderHistory?index=${indexPage+1}&uid=${sessionScope.acc.userID}&name=${txtH}" class="page-link">Next</a></li>
+                                        </c:if>
                                 </ul>
                             </c:if>
                         </div>

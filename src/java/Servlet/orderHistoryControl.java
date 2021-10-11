@@ -6,6 +6,8 @@
 package Servlet;
 
 import dao.AllDao;
+import dao.paggingDAO;
+import generic.getUrl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -69,8 +71,7 @@ public class orderHistoryControl extends HttpServlet {
         HttpSession session = request.getSession();
         User u = (User) session.getAttribute("acc");
         if (u == null) {
-            String url = request.getRequestURI() + "?" + request.getQueryString();
-            request.setAttribute("url", url);
+            getUrl.getUrl(request, response);
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
             if (action == null) {
@@ -81,10 +82,10 @@ public class orderHistoryControl extends HttpServlet {
 
     protected void doGet_load(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String uid = request.getParameter("uid");
+        int uid = Integer.parseInt(request.getParameter("uid"));
         String indexPage = request.getParameter("index");
 
-        AllDao dao = new AllDao();
+        paggingDAO dao = new paggingDAO();
 
         int count = dao.countAllOrderHistory(uid);
         int endPage = count / 6;
@@ -96,11 +97,6 @@ public class orderHistoryControl extends HttpServlet {
         }
         int index = Integer.parseInt(indexPage);
         List<OrderHistory> list = dao.paggingAllOrderHistory(uid, index);
-//        for (OrderHistory o : list) {
-//            SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy");
-//            String orderDateFormat = df.format(o.o.getOrderDate());
-//            o.getO().setOrderDate(orderDateFormat);
-//        }
 
         request.setAttribute("indexPage", indexPage);
         request.setAttribute("end", endPage);

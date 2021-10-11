@@ -113,9 +113,6 @@
                 height: 37px;
                 margin-right: 15px;
             }
-            #mess {
-                
-            }
         </style>
         <!-- Favicon and touch icons -->
         <link rel="shortcut icon" href="assets/ico/favicon.png">
@@ -152,7 +149,7 @@
                                     <button type="button" class="toggle-btn" onclick="register()"> Register </button>
                                 </div>
                                 <form id="login" role="form" action="login" method="post" class="login-form">
-                                    <!--<input type="hidden" name="url" value="${url}">-->
+                                    <input type="hidden" name="url" value="${url}">
                                     <div class="form-group">
                                         <label class="sr-only" for="form-username">Username</label>
                                         <input type="text" name="user" placeholder="Username..." class="form-username form-control" id="form-username" required>
@@ -168,11 +165,10 @@
                                     <button type="submit" class="btn">Sign in!</button>
                                     <p id="mess">
                                         ${mess}
-                                        ${error }
+                                        ${error}
                                     </p>
                                 </form>
                                 <form id="register" role="form" action="signUp" method="post" class="login-form">
-                                    <!--<input type="hidden" name="url" value="${url}">-->
                                     <div class="form-group">
                                         <label class="sr-only" for="form-username">Username</label>
                                         <input type="text" name="user" placeholder="Username..." class="form-username form-control" id="form-username">

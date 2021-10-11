@@ -16,10 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.User;
 
-/**
- *
- * @author tungn
- */
 @WebServlet(name = "loginControl", urlPatterns = {"/login"})
 public class loginControl extends HttpServlet {
 
@@ -34,7 +30,7 @@ public class loginControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -49,7 +45,7 @@ public class loginControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        processRequest(request, response);
+        String url = request.getParameter("url");
         Cookie arr[] = request.getCookies();
         if (arr != null) {
             for (Cookie o : arr) {
@@ -61,13 +57,14 @@ public class loginControl extends HttpServlet {
                 }
             }
         }
+        request.setAttribute("url", url);
         request.getRequestDispatcher("login.jsp").forward(request, response);
     }
-
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        String url = request.getParameter("url");
+        String url = request.getParameter("url");
         String userName = request.getParameter("user");
         String passWord = request.getParameter("pass");
         String remember = request.getParameter("remember");
@@ -83,24 +80,30 @@ public class loginControl extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);    //khong truyen du lieu
         } else {
             if (captcha.equals(verifyCaptcha)) {
-                //đẩy a lên session
-                session.setAttribute("acc", u);    //khởi tạo session có name = "acc"
-
-                //login => cookie + session
-                Cookie us = new Cookie("userC", u.getUserName());
-                Cookie pa = new Cookie("passC", u.getPassword());
-                //luu a.getuser > user, a.getpass => pass o tren cookie
-                us.setMaxAge(3600);
-                if (remember != null) {
-                    us.setMaxAge(3600);  //60s
-                } else {
-                    pa.setMaxAge(0);
+                if (u.isIsActive()) {
+                    Cookie us = new Cookie("userC", u.getUserName());
+                    Cookie pa = new Cookie("passC", u.getPassword());
+                    us.setMaxAge(3600);
+                    if (remember != null) {
+                        us.setMaxAge(3600);
+                    } else {
+                        pa.setMaxAge(0);
+                    }
+                    response.addCookie(us);
+                    response.addCookie(pa);
+                    
+                    session.setAttribute("acc", u);
+                    if (url.isEmpty()) {
+                        response.sendRedirect("home");
+                    } else {
+                        response.sendRedirect(url);
+                    }
+                } else {                    
+                    request.setAttribute("error", "<div class=\"alert alert-warning\" role=\"alert\">\n"
+                            + "<img id=\"warning\" src=\"assets/images/icons/alert-icon-red-11.png\" alt=\"warnning\">Your account is not active!!\n"
+                            + "</div>");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
                 }
-                //lưu cookie u và p ở browser
-                response.addCookie(us);
-                response.addCookie(pa);
-
-                response.sendRedirect("home");
             } else {
                 request.setAttribute("error", "<div class=\"alert alert-warning\" role=\"alert\">\n"
                         + "<img id=\"warning\" src=\"assets/images/icons/alert-icon-red-11.png\" alt=\"warnning\">Captcha Invalid!!\n"
@@ -108,7 +111,7 @@ public class loginControl extends HttpServlet {
                 request.getRequestDispatcher("login.jsp").forward(request, response);
             }
         }
-
+        
     }
 
     /**

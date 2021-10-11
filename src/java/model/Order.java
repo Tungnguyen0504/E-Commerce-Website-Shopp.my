@@ -22,19 +22,17 @@ public class Order {
     private Timestamp orderDate;
     private double total;
     private int billStatus;
-    User u;
 
     public Order() {
     }
 
-    public Order(int orderID, int userID, String payment, Timestamp orderDate, double total, int billStatus, User u) {
+    public Order(int orderID, int userID, String payment, Timestamp orderDate, double total, int billStatus) {
         this.orderID = orderID;
         this.userID = userID;
         this.payment = payment;
         this.orderDate = orderDate;
         this.total = total;
         this.billStatus = billStatus;
-        this.u = u;
     }
 
     public int getOrderID() {
@@ -64,14 +62,14 @@ public class Order {
     public Timestamp getOrderDate() {
         return orderDate;
     }
+    
+    public String getOrderDateFormat() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        return df.format(orderDate);
+    }
 
     public void setOrderDate(Timestamp orderDate) {
         this.orderDate = orderDate;
-    }
-
-    public String getOrderDateFormat() {
-        SimpleDateFormat df = new SimpleDateFormat("MMMM dd, yyyy");
-        return df.format(orderDate);
     }
 
     public double getTotal() {
@@ -90,17 +88,9 @@ public class Order {
         this.billStatus = billStatus;
     }
 
-    public User getU() {
-        return u;
-    }
-
-    public void setU(User u) {
-        this.u = u;
-    }
-
     @Override
     public String toString() {
-        return "Order{" + "orderID=" + orderID + ", userID=" + userID + ", payment=" + payment + ", orderDate=" + orderDate + ", total=" + total + ", billStatus=" + billStatus + ", u=" + u + '}';
+        return "Order{" + "orderID=" + orderID + ", userID=" + userID + ", payment=" + payment + ", orderDate=" + orderDate + ", total=" + total + ", billStatus=" + billStatus + '}';
     }
 
 }

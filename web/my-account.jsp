@@ -31,6 +31,8 @@
 
         <!-- Main Style CSS -->
         <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.min.css" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.5/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 
         <style>
             .ee-register form input {
@@ -39,6 +41,79 @@
             #register-btn {
                 padding-bottom: 50px;
             }
+            .file-caption-name {
+                height: 38px;
+            }
+            .file-footer-caption {
+                display: none;
+            }
+            .krajee-default .file-footer-caption {
+                display: none;
+            }
+            .file-preview {
+                margin: auto;
+                margin-bottom: 10px;
+            }
+            .file-caption {
+                margin: auto;
+            }
+            .file-drop-zone {
+                border: 0;
+                height: 200px;
+                min-height: 200px;
+                margin: 0;
+
+            }
+            .file-drop-zone-title {
+                padding: 81px 10px;
+                max-height: 200px;
+            }
+            .file-drop-zone .file-preview-thumbnails {
+                margin-bottom: 0;
+            }
+            .krajee-default.file-preview-frame {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+            .krajee-default.file-preview-frame .kv-file-content {
+                margin-bottom: 0;
+            }
+            .file-preview-image {
+                max-width: 420px !important;
+                max-height: 210px !important;
+                width: auto !important;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+            }
+            .file-preview .fileinput-remove {
+                z-index: 1;
+            }
+            .label-image {
+                text-align: center;
+            }
+            .label-image label {
+                margin-bottom: 4px;
+                font-size: 24px;
+                font-weight: 500;
+            }
+            .form-action {
+                margin-bottom: 30px;
+                padding: 0 50px;
+            }
+            .form-group {
+                align-items: center;
+            }
+            .input-name {
+                width: 180px;
+            }
+
         </style>
 
         <!-- Modernizer JS -->
@@ -72,24 +147,22 @@
             <!-- Register Section Start -->
             <div class="register-section section mt-90 mb-90">
                 <div class="container">
-                    <div class="row">
-                        <h3>We will need for your registration</h3>
-                        <p>E&E provide how all this mistaken idea of denouncing pleasure and sing pain born an will give you a complete account of the system, and expound</p>
+                    <form action="myAccount?action=update" method="post">
+                        <div class="row">
+                            <h3>We will need for your registration</h3>
+                            <p>E&E provide how all this mistaken idea of denouncing pleasure and sing pain born an will give you a complete account of the system, and expound</p>
 
-                        <!-- Register -->
-                        <div class="col-md-6 col-12 d-flex">
-                            <div class="ee-register">
+                            <!-- Register -->
+                            <div class="col-md-6 col-12 d-flex">
+                                <div class="ee-register">
 
-                                <!-- Register Form -->
-                                <form action="myAccount?action=update" method="post">
+                                    <!-- Register Form -->
                                     <div class="row">
-                                        <input value="${view.userID}" name="userID" type="hidden" class="form-control">
+                                        <input value="${view.userID}" name="uid" type="hidden" class="form-control">
                                     <div class="col-12 mb-30">
                                         <label>User Name</label>
                                         <input type="text" value="${view.userName}" class="form-control" name="userName" readonly>
                                     </div>
-                                    <input type="hidden" value="${view.password}" class="form-control" name="password" required>
-                                    <input type="hidden" value="${view.isAdmin}" class="form-control" name="isAdmin" required>
                                     <div class="col-12 mb-30">
                                         <label>Full Name</label>
                                         <input type="text" value="${view.fullName}" class="form-control" name="fullName" required>
@@ -112,38 +185,24 @@
                                     </div>
                                     <div class="col-12" id="register-btn"><input type="submit" value="Update Account"></div>
                                 </div>
-                            </form>
 
 
-                        </div>
-                    </div>
-
-                    <div class="col-md-1 col-12 d-flex">
-
-                        <div class="login-reg-vertical-boder"></div>
-
-                    </div>
-
-                    <!-- Account Image -->
-                    <div class="col-md-5 col-12 d-flex">
-
-                        <div class="ee-account-image">
-                            <h3>Upload your Image</h3>
-
-                            <img src="assets/images/account-image-placeholder.jpg" alt="Account Image Placeholder" class="image-placeholder">
-
-                            <div class="account-image-upload">
-                                <input type="file" name="chooseFile" id="account-image-upload">
-                                <label class="account-image-label" for="account-image-upload">Choose your image</label>
                             </div>
-
-                            <p>jpEG 250x250</p>
-
                         </div>
 
-                    </div>
+                        <div class="col-md-1 col-12 d-flex">
 
-                </div>
+                            <div class="login-reg-vertical-boder"></div>
+
+                        </div>
+                        <div class="form-action col-xl-5 col-lg-5 col-md-5 col-sm-5 col-12" style="margin: auto;">
+                            <div class="form-group label-image">
+                                <input id="input-b8" name="image" type="file" class="file" data-show-caption="true"
+                                       data-show-upload="false" data-show-remove="false" data-msg-placeholder="Upload for image ..." required>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div><!-- Register Section End -->
 
@@ -157,7 +216,7 @@
         <script src="assets/js/bootstrap.min.js"></script>
         <!-- Plugins JS -->
         <script src="assets/js/plugins.js"></script>
-
+        <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.5/js/fileinput.min.js"></script>
         <!-- Main JS -->
         <script src="assets/js/main.js"></script>
 

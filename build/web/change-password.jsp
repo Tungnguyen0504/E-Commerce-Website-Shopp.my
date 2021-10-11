@@ -125,8 +125,7 @@
 
                         <div class="ee-account-image">
                             <h3>Upload your Image</h3>
-
-                            <img src="assets/images/account-image-placeholder.jpg" alt="Account Image Placeholder" class="image-placeholder">
+                            <img src="assets/images/user/account-image-placeholder.jpg" alt="Account Image Placeholder" class="image-placeholder">
 
                             <div class="account-image-upload">
                                 <input type="file" name="chooseFile" id="account-image-upload">

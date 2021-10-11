@@ -75,22 +75,11 @@
                     <div class="col-md-3 order-2 mt-10 mb-10" style="display: flex; justify-content: end; width: 25%;">
                         <!-- Header Account Links Start -->
                         <c:if test="${sessionScope.acc == null}">
-                            <%
-                                String url = request.getRequestURI() + "?" + request.getQueryString();
-                            %>
-                            <a class="btn btn-primary" href="login" role="button" style="border-radius: 25px">Login</a>
-                        </c:if>
-                        <c:if test="${sessionScope.acc.isAdmin}">
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-tasks"></i><span>Manage</span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton2">
-                                    <li><a class="dropdown-item" href="manageAccount">Manage Accounts</a></li>
-                                    <li><a class="dropdown-item" href="manageProduct?cid=1">Manage Products</a></li>
-                                    <li><a class="dropdown-item" href="manageBill">Manage Bill</a></li>
-                                </ul>
-                            </div><h4 style="color: white;">|</h4>
+                            <!--<a class="btn btn-primary" href="login" role="button" style="border-radius: 25px">Login</a>-->
+                            <form action="login" method="get">
+                                <input type="hidden" name="url" value="${url}">
+                                <button class="btn btn-primary" role="button" style="border-radius: 25px">Login</button>
+                            </form>
                         </c:if>
                         <c:if test="${sessionScope.acc != null}">
                             <div class="dropdown">
@@ -101,6 +90,9 @@
                                     <li><a class="dropdown-item" href="myAccount?uid=${sessionScope.acc.userID}&action=viewAccount">My Account</a></li>
                                     <li><a class="dropdown-item" href="myAccount?uid=${sessionScope.acc.userID}&action=viewPassword">Change Password</a></li>
                                     <li><a class="dropdown-item" href="orderHistory?uid=${sessionScope.acc.userID}">Order History</a></li>
+                                        <c:if test="${sessionScope.acc.isAdmin}">
+                                        <li><a class="dropdown-item" href="manageDashboard">Manage Page</a></li>
+                                        </c:if>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="logout">Logout</a></li>
                                 </ul>
@@ -172,8 +164,8 @@
                     <div class="col order-2 order-lg-12 order-xl-12">
                         <!-- Header Shop Links Start -->
                         <div class="header-shop-links">
-                            <c:if test="${sessionScope.cart.size() == null}"><a href="shoppingCart" class="header-cart"><i class="ti-shopping-cart"></i><span class="number">0</span> </a></c:if>
-                            <c:if test="${sessionScope.cart.size() != null}"><a href="shoppingCart" class="header-cart"><i class="ti-shopping-cart"></i><span class="number">${sessionScope.cart.size()}</span> </a></c:if>
+                            <c:if test="${sessionScope.cart.size() == null}"><a href="shoppingCart" class="header-cart" title="Cart"><i class="ti-shopping-cart"></i><span class="number">0</span> </a></c:if>
+                            <c:if test="${sessionScope.cart.size() != null}"><a href="shoppingCart" class="header-cart" title="Cart"><i class="ti-shopping-cart"></i><span class="number">${sessionScope.cart.size()}</span> </a></c:if>
                         </div><!-- Header Shop Links End -->
                     </div>
 

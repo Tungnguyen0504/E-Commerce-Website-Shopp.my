@@ -27,6 +27,74 @@
         <link rel="stylesheet" href="assets/css/plugins.css">
         <link rel="stylesheet" href="assets/css/style.css">
         <script src="assets/js/vendor/modernizr-2.8.3.min.js"></script>
+        <style>
+            .carousel .carousel-item {
+                color: #999;
+                overflow: hidden;
+                min-height: 120px;
+                font-size: 13px;
+            }
+            .media {
+                display: flex;
+            }
+            .carousel .media img {
+                width: 80px;
+                height: 80px;
+                display: block;
+                border-radius: 50%;
+                margin: auto;
+            }
+            .carousel .testimonial {
+                padding: 0 15px 0 60px ;
+                position: relative;
+            }
+            .carousel .testimonial::before {
+                content: "\201C";
+                font-family: Arial,sans-serif;
+                color: #e2e2e2;
+                font-weight: bold;
+                font-size: 68px;
+                line-height: 54px;
+                position: absolute;
+                left: 15px;
+                top: 0;
+            }
+            .carousel .overview b {
+                text-transform: uppercase;
+                color: #1c47e3;
+            }
+            .carousel .carousel-indicators {
+                bottom: -40px;
+            }
+            .carousel-indicators li, .carousel-indicators li.active {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                margin: 1px 3px;
+                box-sizing: border-box;
+            }
+            .carousel-indicators li {	
+                background: #e2e2e2;
+                border: 4px solid #fff;
+            }
+            .carousel-indicators li.active {
+                color: #fff;
+                background: #1c47e3;    
+                border: 5px double;    
+            }
+            .carousel-inner {
+                padding: 20px 140px;
+            }
+            .head_title h2 {
+                font-weight: 700;
+                font-size: 2.250rem;
+            }
+            .head_title h5 {
+                font-weight: 400;
+                font-size: 1.125rem;
+                color: #999999;
+            }
+        </style>
     </head>
     <body>
         <!-- Header Section Start -->
@@ -197,7 +265,7 @@
                                                         </div>
 
                                                         <c:if test="${o.PQuantity > 0}"><span class="availability" style="background: #5ac478;">In Stock</span></c:if>
-                                                        <c:if test="${o.PQuantity <= 0}"><span class="availability" style="background: #c88956;">Out of Stock</span></c:if>
+                                                        <c:if test="${o.PQuantity <= 0}"><span class="availability" style="background: #ed1d24;">Out of Stock</span></c:if>
 
                                                         <c:if test="${o.PQuantity > 0}"><a href="#" onclick="addToCart(${o.productID})" class="add-to-cart"><i class="ti-shopping-cart"></i><span>ADD TO CART</span></a></c:if>
                                                         </div>
@@ -222,16 +290,19 @@
                                                             <c:set var="s3" value="${d.countRating(o.productID, 3)}"/>
                                                             <c:set var="s2" value="${d.countRating(o.productID, 2)}"/>
                                                             <c:set var="s1" value="${d.countRating(o.productID, 1)}"/>
-                                                            <c:set var="rate" value="${(s5*5+s4*4+s3*3+s2*2+s1*1)/(s5+s4+s3+s2+s1)}"/>
-                                                            <fmt:formatNumber var="rateS" maxFractionDigits="0" value="${rate}"/>
-                                                            <div class="ratting">
-                                                                <c:forEach begin="1" end="${rateS}">
-                                                                    <i class="fa fa-star"></i>
-                                                                </c:forEach>
-                                                                <c:forEach begin="${rateS + 1}" end="5">
-                                                                    <i class="far fa-star"></i>
-                                                                </c:forEach>
-                                                            </div>
+
+                                                            <c:if test="${s5 != 0 || s4 != 0 || s3 != 0 || s2 != 0 || s1 != 0}">
+                                                                <c:set var="rate" value="${(s5*5+s4*4+s3*3+s2*2+s1*1)/(s5+s4+s3+s2+s1)}"/>
+                                                                <fmt:formatNumber var="rateS" maxFractionDigits="0" value="${rate}"/>
+                                                                <div class="ratting">
+                                                                    <c:forEach begin="1" end="${rateS}">
+                                                                        <i class="fa fa-star"></i>
+                                                                    </c:forEach>
+                                                                    <c:forEach begin="${rateS + 1}" end="5">
+                                                                        <i class="far fa-star"></i>
+                                                                    </c:forEach>
+                                                                </div>
+                                                            </c:if>
 
                                                         </div>
 
@@ -289,7 +360,7 @@
                                             </div>
 
                                             <c:if test="${o.PQuantity > 0}"><span class="availability" style="background: #5ac478;">In Stock</span></c:if>
-                                            <c:if test="${o.PQuantity <= 0}"><span class="availability" style="background: #c88956;">Out of Stock</span></c:if>
+                                            <c:if test="${o.PQuantity <= 0}"><span class="availability" style="background: #ed1d24;">Out of Stock</span></c:if>
 
                                             <c:if test="${o.PQuantity > 0}"><a href="#" onclick="addToCart(${o.productID})" class="add-to-cart"><i class="ti-shopping-cart"></i><span>ADD TO CART</span></a></c:if>
                                             </div>
@@ -314,16 +385,19 @@
                                                 <c:set var="s3" value="${d.countRating(o.productID, 3)}"/>
                                                 <c:set var="s2" value="${d.countRating(o.productID, 2)}"/>
                                                 <c:set var="s1" value="${d.countRating(o.productID, 1)}"/>
-                                                <c:set var="rate" value="${(s5*5+s4*4+s3*3+s2*2+s1*1)/(s5+s4+s3+s2+s1)}"/>
-                                                <fmt:formatNumber var="rateS" maxFractionDigits="0" value="${rate}"/>
-                                                <div class="ratting">
-                                                    <c:forEach begin="1" end="${rateS}">
-                                                        <i class="fa fa-star"></i>
-                                                    </c:forEach>
-                                                    <c:forEach begin="${rateS + 1}" end="5">
-                                                        <i class="far fa-star"></i>
-                                                    </c:forEach>
-                                                </div>
+
+                                                <c:if test="${s5 != 0 || s4 != 0 || s3 != 0 || s2 != 0 || s1 != 0}">
+                                                    <c:set var="rate" value="${(s5*5+s4*4+s3*3+s2*2+s1*1)/(s5+s4+s3+s2+s1)}"/>
+                                                    <fmt:formatNumber var="rateS" maxFractionDigits="0" value="${rate}"/>
+                                                    <div class="ratting">
+                                                        <c:forEach begin="1" end="${rateS}">
+                                                            <i class="fa fa-star"></i>
+                                                        </c:forEach>
+                                                        <c:forEach begin="${rateS + 1}" end="5">
+                                                            <i class="far fa-star"></i>
+                                                        </c:forEach>
+                                                    </div>
+                                                </c:if>
 
                                             </div>
 
@@ -458,7 +532,7 @@
                                                                 </div>
 
                                                                 <c:if test="${o.PQuantity > 0}"><span class="availability" style="background: #5ac478;">In Stock</span></c:if>
-                                                                <c:if test="${o.PQuantity <= 0}"><span class="availability" style="background: #c88956;">Out of Stock</span></c:if>
+                                                                <c:if test="${o.PQuantity <= 0}"><span class="availability" style="background: #ed1d24;">Out of Stock</span></c:if>
 
                                                                 <c:if test="${o.PQuantity > 0}"><a href="#" onclick="addToCart(${o.productID})" class="add-to-cart"><i class="ti-shopping-cart"></i><span>ADD TO CART</span></a></c:if>
                                                                 </div>
@@ -483,16 +557,19 @@
                                                                     <c:set var="s3" value="${d.countRating(o.productID, 3)}"/>
                                                                     <c:set var="s2" value="${d.countRating(o.productID, 2)}"/>
                                                                     <c:set var="s1" value="${d.countRating(o.productID, 1)}"/>
-                                                                    <c:set var="rate" value="${(s5*5+s4*4+s3*3+s2*2+s1*1)/(s5+s4+s3+s2+s1)}"/>
-                                                                    <fmt:formatNumber var="rateS" maxFractionDigits="0" value="${rate}"/>
-                                                                    <div class="ratting">
-                                                                        <c:forEach begin="1" end="${rateS}">
-                                                                            <i class="fa fa-star"></i>
-                                                                        </c:forEach>
-                                                                        <c:forEach begin="${rateS + 1}" end="5">
-                                                                            <i class="far fa-star"></i>
-                                                                        </c:forEach>
-                                                                    </div>
+
+                                                                    <c:if test="${s5 != 0 || s4 != 0 || s3 != 0 || s2 != 0 || s1 != 0}">
+                                                                        <c:set var="rate" value="${(s5*5+s4*4+s3*3+s2*2+s1*1)/(s5+s4+s3+s2+s1)}"/>
+                                                                        <fmt:formatNumber var="rateS" maxFractionDigits="0" value="${rate}"/>
+                                                                        <div class="ratting">
+                                                                            <c:forEach begin="1" end="${rateS}">
+                                                                                <i class="fa fa-star"></i>
+                                                                            </c:forEach>
+                                                                            <c:forEach begin="${rateS + 1}" end="5">
+                                                                                <i class="far fa-star"></i>
+                                                                            </c:forEach>
+                                                                        </div>
+                                                                    </c:if>
 
                                                                 </div>
 
@@ -517,114 +594,180 @@
             </div>
         </div><!-- Best Deals Product Section End -->
 
+
         <!-- New Arrival Product Section Start -->
-        <div class="product-section section mb-60">
-            <div class="container">
+        <div class="product-section bg-gray section" style="padding: 60px 0;">
+            <div class="container-fluid">
                 <div class="row">
+                    <div class="head_title text-center fix">
+                        <h2 class="text-uppercase">What Client Say</h2>
+                        <h5>Clean and Modern design is our best specialist</h5>
+                    </div>
 
-                    <!-- Section Title Start -->
-                    <div class="col-12 mb-40">
-                        <div class="section-title-one" data-title="NEW ARRIVAL"><h1>NEW ARRIVAL</h1></div>
-                    </div><!-- Section Title End -->
-
-                    <div class="col-12">
-                        <div class="row">
-                            <c:forEach items="${list4}" var="o">
-                                <div class="col-xl-3 col-lg-4 col-md-6 col-12 pb-30 pt-10">
-                                    <!-- Product Start -->
-                                    <div class="ee-product">
-
-                                        <!-- Image -->
-                                        <div class="image">
-
-                                            <span class="label sale"><i>-${o.discountPercent}%</i></span>
-                                            <a href="singleProduct?pid=${o.productID}" class="img"><img src="assets/images/products/${o.image1}" alt="Product Image"></a>
-
-                                            <div class="wishlist-compare">
-                                                <a href="#" data-tooltip="Compare"><i class="ti-control-shuffle"></i></a>
-                                                <a href="#" data-tooltip="Wishlist"><i class="ti-heart"></i></a>
-                                            </div>
-
-                                            <c:if test="${o.PQuantity > 0}"><span class="availability" style="background: #5ac478;">In Stock</span></c:if>
-                                            <c:if test="${o.PQuantity <= 0}"><span class="availability" style="background: #c88956;">Out of Stock</span></c:if>
-
-                                            <c:if test="${o.PQuantity > 0}"><a href="#" onclick="addToCart(${o.productID})" class="add-to-cart"><i class="ti-shopping-cart"></i><span>ADD TO CART</span></a></c:if>
-                                            </div>
-
-                                            <!-- Content -->
-                                            <div class="content">
-
-                                                <!-- Category & Title -->
-                                                <div class="category-title">
-                                                <c:set value="${d.getCategoryByID(o.categoryID)}" var="c"/>
-                                                <a href="category?id=${c.categoryID}" class="cat">${c.categoryName}</a>
-                                                <h5 class="title"><a href="singleProduct?pid=${o.productID}">${o.productName}</a></h5>
-
-                                            </div>
-
-                                            <!-- Price & Ratting -->
-                                            <div class="price-ratting">
-
-                                                <h5 class="price"><span class="old">$${o.price}</span>$${o.priceDiscount}</h5>
-                                                <c:set var="s5" value="${d.countRating(o.productID, 5)}"/>
-                                                <c:set var="s4" value="${d.countRating(o.productID, 4)}"/>
-                                                <c:set var="s3" value="${d.countRating(o.productID, 3)}"/>
-                                                <c:set var="s2" value="${d.countRating(o.productID, 2)}"/>
-                                                <c:set var="s1" value="${d.countRating(o.productID, 1)}"/>
-                                                <c:set var="rate" value="${(s5*5+s4*4+s3*3+s2*2+s1*1)/(s5+s4+s3+s2+s1)}"/>
-                                                <fmt:formatNumber var="rateS" maxFractionDigits="0" value="${rate}"/>
-                                                <div class="ratting">
-                                                    <c:forEach begin="1" end="${rateS}">
-                                                        <i class="fa fa-star"></i>
-                                                    </c:forEach>
-                                                    <c:forEach begin="${rateS + 1}" end="5">
-                                                        <i class="far fa-star"></i>
-                                                    </c:forEach>
+                    <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="media">
+                                            <img src="assets/images/user/user2.jpg" class="mr-3" alt="">
+                                            <div class="media-body">
+                                                <div class="testimonial">
+                                                    <p>Lorem ipsum dolor sit amet, consec adipiscing elit. Nam eusem scelerisque tempor, varius quam luctus dui. Mauris magna metus nec.</p>
+                                                    <p class="overview"><b>Paula Wilson</b>, Media Analyst</p>
+                                                    <div class="ratting-star" style="font-size: 20px; color: #ea9d02;">
+                                                        <c:forEach begin="1" end="5">
+                                                            <i class="fa fa-star"></i>
+                                                        </c:forEach>
+                                                    </div>
                                                 </div>
 
                                             </div>
-
                                         </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="media">
+                                            <img src="assets/images/user/user3.jpg" class="mr-3" alt="">
+                                            <div class="media-body">
+                                                <div class="testimonial">
+                                                    <p>Vestibulum quis quam ut magna consequat faucibus. Pellentesque eget mi suscipit tincidunt. Utmtc tempus dictum. Pellentesque virra.</p>
+                                                    <p class="overview"><b>Antonio Moreno</b>, Web Developer</p>
+                                                    <div class="ratting-star" style="font-size: 18px; color: #ea9d02;">
+                                                        <c:forEach begin="1" end="5">
+                                                            <i class="fa fa-star"></i>
+                                                        </c:forEach>
+                                                    </div>
+                                                </div>
 
-                                    </div><!-- Product End -->
-                                </div>
-                            </c:forEach>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>			
+                            </div>
+                            <div class="carousel-item" data-bs-interval="2000">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="media">
+                                            <img src="assets/images/user/user2.jpg" class="mr-3" alt="">
+                                            <div class="media-body">
+                                                <div class="testimonial">
+                                                    <p>Lorem ipsum dolor sit amet, consec adipiscing elit. Nam eusem scelerisque tempor, varius quam luctus dui. Mauris magna metus nec.</p>
+                                                    <p class="overview"><b>Paula Wilson</b>, Media Analyst</p>
+                                                    <div class="ratting-star" style="font-size: 20px; color: #ea9d02;">
+                                                        <c:forEach begin="1" end="5">
+                                                            <i class="fa fa-star"></i>
+                                                        </c:forEach>
+                                                    </div>
+                                                </div>
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="media">
+                                            <img src="assets/images/user/user3.jpg" class="mr-3" alt="">
+                                            <div class="media-body">
+                                                <div class="testimonial">
+                                                    <p>Vestibulum quis quam ut magna consequat faucibus. Pellentesque eget mi suscipit tincidunt. Utmtc tempus dictum. Pellentesque virra.</p>
+                                                    <p class="overview"><b>Antonio Moreno</b>, Web Developer</p>
+                                                    <div class="ratting-star" style="font-size: 18px; color: #ea9d02;">
+                                                        <c:forEach begin="1" end="5">
+                                                            <i class="fa fa-star"></i>
+                                                        </c:forEach>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>	
+                            </div>
+                            <div class="carousel-item">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="media">
+                                            <img src="assets/images/user/user2.jpg" class="mr-3" alt="">
+                                            <div class="media-body">
+                                                <div class="testimonial">
+                                                    <p>Lorem ipsum dolor sit amet, consec adipiscing elit. Nam eusem scelerisque tempor, varius quam luctus dui. Mauris magna metus nec.</p>
+                                                    <p class="overview"><b>Paula Wilson</b>, Media Analyst</p>
+                                                    <div class="ratting-star" style="font-size: 20px; color: #ea9d02;">
+                                                        <c:forEach begin="1" end="5">
+                                                            <i class="fa fa-star"></i>
+                                                        </c:forEach>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="media">
+                                            <img src="assets/images/user/user3.jpg" class="mr-3" alt="">
+                                            <div class="media-body">
+                                                <div class="testimonial">
+                                                    <p>Vestibulum quis quam ut magna consequat faucibus. Pellentesque eget mi suscipit tincidunt. Utmtc tempus dictum. Pellentesque virra.</p>
+                                                    <p class="overview"><b>Antonio Moreno</b>, Web Developer</p>
+                                                    <div class="ratting-star" style="font-size: 18px; color: #ea9d02;">
+                                                        <c:forEach begin="1" end="5">
+                                                            <i class="fa fa-star"></i>
+                                                        </c:forEach>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>	
+                            </div>
                         </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
-
                 </div>
             </div>
         </div><!-- New Arrival Product Section End -->
-
         <jsp:include page="footer.jsp"></jsp:include>
+
+            <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+            <script src="assets/js/popper.min.js" type="text/javascript"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="assets/js/plugins.js"></script>
+            <script src="assets/js/main.js"></script>
             <script>
-                function addToCart(pid) {
-                    if (${sessionScope.acc == null}) {
-                        window.location.assign('login');
-                    } else {
-                        $.ajax({
-                            url: "/Project/shoppingCart",
-                            type: "GET",
-                            data: {
-                                action: 'ordernow',
-                                id: pid
-                            },
-                            success: function (data) {
-                                $(".header-shop-links").html(data);
-                            },
-                            error: function (xhr) {
-                                //Do Something to handle error
-                            }
-                        });
-                    }
-                }
+                                                                    function addToCart(pid) {
+                                                                        if (${sessionScope.acc == null}) {
+                                                                            window.location.assign('login?url=${url}');
+                                                                        } else {
+                                                                            $.ajax({
+                                                                                url: "shoppingCart",
+                                                                                type: "GET",
+                                                                                data: {
+                                                                                    action: 'ordernow',
+                                                                                    id: pid
+                                                                                },
+                                                                                success: function (data) {
+                                                                                    $(".header-shop-links").html(data);
+                                                                                },
+                                                                                error: function (xhr) {
+                                                                                    //Do Something to handle error
+                                                                                }
+                                                                            });
+                                                                        }
+                                                                    }
         </script>
-        <script src="assets/js/vendor/jquery-1.12.4.min.js"></script>
-        <script src="assets/js/popper.min.js" type="text/javascript"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="assets/js/plugins.js"></script>
-        <script src="assets/js/main.js"></script>
+
     </body>
 
 </html>

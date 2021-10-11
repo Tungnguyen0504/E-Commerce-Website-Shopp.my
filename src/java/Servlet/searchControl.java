@@ -7,6 +7,8 @@ package Servlet;
 
 import model.Products;
 import dao.AllDao;
+import dao.paggingDAO;
+import generic.getUrl;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -36,11 +38,13 @@ public class searchControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
+        getUrl.getUrl(request, response);
         String txtSearch = request.getParameter("txt");
         String cid = request.getParameter("choose");
         String indexPage = request.getParameter("index");
 
-        AllDao dao = new AllDao();
+        paggingDAO dao = new paggingDAO();
         int count = dao.countSearchProduct(txtSearch, cid);
         int endPage = count / 9;
         if (count % 9 != 0) {

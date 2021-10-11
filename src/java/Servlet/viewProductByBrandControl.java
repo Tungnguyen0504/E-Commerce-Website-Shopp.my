@@ -6,6 +6,7 @@
 package Servlet;
 
 import dao.AllDao;
+import generic.getUrl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -37,6 +38,7 @@ public class viewProductByBrandControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        getUrl.getUrl(request, response);
         String brand = request.getParameter("brand");
         String cid = request.getParameter("id");
 

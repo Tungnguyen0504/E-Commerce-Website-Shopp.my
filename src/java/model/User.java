@@ -10,12 +10,13 @@ package model;
  * @author tungn
  */
 public class User {
-    
+
     private int userID;
     private String userName;
     private String password;
     private boolean isAdmin;
     private boolean isActive;
+    private String image;
     private String fullName;
     private String email;
     private String address;
@@ -25,12 +26,13 @@ public class User {
     public User() {
     }
 
-    public User(int userID, String userName, String password, boolean isAdmin, boolean isActive, String fullName, String email, String address, String city, String telephone) {
+    public User(int userID, String userName, String password, boolean isAdmin, boolean isActive, String image, String fullName, String email, String address, String city, String telephone) {
         this.userID = userID;
         this.userName = userName;
         this.password = password;
         this.isAdmin = isAdmin;
         this.isActive = isActive;
+        this.image = image;
         this.fullName = fullName;
         this.email = email;
         this.address = address;
@@ -78,6 +80,14 @@ public class User {
         this.isActive = isActive;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public String getFullName() {
         return fullName;
     }
@@ -120,9 +130,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "userID=" + userID + ", userName=" + userName + ", password=" + password + ", isAdmin=" + isAdmin + ", isActive=" + isActive + ", fullName=" + fullName + ", email=" + email + ", address=" + address + ", city=" + city + ", telephone=" + telephone + '}';
+        return "User{" + "userID=" + userID + ", userName=" + userName + ", password=" + password + ", isAdmin=" + isAdmin + ", isActive=" + isActive + ", image=" + image + ", fullName=" + fullName + ", email=" + email + ", address=" + address + ", city=" + city + ", telephone=" + telephone + '}';
     }
-    
-  
-    
+
 }

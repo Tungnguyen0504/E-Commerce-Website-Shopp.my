@@ -6,8 +6,10 @@
 package Servlet;
 
 import dao.AllDao;
+import dao.paggingDAO;
+import generic.getUrl;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,8 +29,7 @@ import model.User;
 public class manageBillControl extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -40,63 +41,33 @@ public class manageBillControl extends HttpServlet {
 
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String action = request.getParameter("action");
-        HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("acc");
-        if (u == null) {
-            String url = request.getRequestURI() + "?" + request.getQueryString();
-            request.setAttribute("url", url);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        } else {
-            if (action == null) {
-                doGet_load(request, response);
-            } else if (action.equalsIgnoreCase("delete")) {
-                doPost_delete(request, response);
-            } else if (action.equalsIgnoreCase("changeST")) {
-                doPost_changeST(request, response);
-            }
-        }
-    }
-
     protected void doGet_load(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String indexPage = request.getParameter("index");
-
         AllDao dao = new AllDao();
 
-        int count = dao.countOrder();   
-        int endPage = count / 8;   
-        if (count % 8 != 0) {
-            endPage++;   
-        }
-        if (indexPage == null) {
-            indexPage = "1";
-        }
-        int index = Integer.parseInt(indexPage);
-        List<Order> list = dao.paggingOrder(index);
-        
-        request.setAttribute("indexPage", indexPage);
+        List<Order> list = dao.getAllOrder();
+
         request.setAttribute("listOrder", list);
-        request.setAttribute("end", endPage);
-        request.setAttribute("tag", index);    //index active
-        request.setAttribute("count", count);
-        request.getRequestDispatcher("manage-bill.jsp").forward(request, response);
+        request.getRequestDispatcher("manage-order.jsp").forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet_view(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int oid = Integer.parseInt(request.getParameter("oid"));
+        AllDao dao = new AllDao();
+
+        List<OrderDetails> list = dao.getOrderDetailByID(oid);
+        Order o = dao.findOrder(oid);
+        User u = dao.findAccount(o.getUserID());
+
+        SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+        String orderDate = df.format(o.getOrderDate());
+
+        request.setAttribute("user", u);
+        request.setAttribute("order", o);
+        request.setAttribute("orderDate", orderDate);
+        request.setAttribute("listOrderDetail", list);
+        request.getRequestDispatcher("order-detail.jsp").forward(request, response);
     }
 
     protected void doPost_delete(HttpServletRequest request, HttpServletResponse response)
@@ -109,18 +80,52 @@ public class manageBillControl extends HttpServlet {
 
     protected void doPost_changeST(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("id");
-        String status = request.getParameter("status");
+        int oid = Integer.parseInt(request.getParameter("oid"));
+        String status = request.getParameter("st");
         //b2: call dao
         AllDao dao = new AllDao();
-        dao.changeStatus(id, status);
+        dao.changeStatus(oid, status);
+        response.sendRedirect("manageBill");
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("acc");
+        if (u == null) {
+            getUrl.getUrl(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        } else {
+            if (action == null) {
+                doGet_load(request, response);
+            } else if (action.equalsIgnoreCase("delete")) {
+                doPost_delete(request, response);
+            } else if (action.equalsIgnoreCase("changeStatus")) {
+                doPost_changeST(request, response);
+            } else if (action.equalsIgnoreCase("view")) {
+                doGet_view(request, response);
+            }
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("acc");
+        if (u == null) {
+            getUrl.getUrl(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        } else {
+            if (action.equalsIgnoreCase("changeStatus")) {
+                doPost_changeST(request, response);
+            }
+        }
+    }
+
     @Override
     public String getServletInfo() {
         return "Short description";

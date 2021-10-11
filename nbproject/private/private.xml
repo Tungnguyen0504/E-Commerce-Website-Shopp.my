@@ -4,11 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="Lab_Desk"/>
         <group>
-            <file>file:/F:/My%20Name/Java%20Web/Project/ProjectWeb2/E-commerce%20Project/Project/src/java/dao/AllDao.java</file>
-            <file>file:/F:/My%20Name/Java%20Web/Project/ProjectWeb2/E-commerce%20Project/Project/src/java/Servlet/singleProductControl.java</file>
-            <file>file:/F:/My%20Name/Java%20Web/Project/ProjectWeb2/E-commerce%20Project/Project/web/shop-grid.jsp</file>
-            <file>file:/F:/My%20Name/Java%20Web/Project/ProjectWeb2/E-commerce%20Project/Project/web/assets/css/style.css</file>
-            <file>file:/F:/My%20Name/Java%20Web/Project/ProjectWeb2/E-commerce%20Project/Project/web/single-product.jsp</file>
+            <file>file:/C:/Users/tungn/OneDrive/Desktop/E-Commerce-Website-Shopp.my/src/java/Servlet/updownQuantityControl.java</file>
+            <file>file:/C:/Users/tungn/OneDrive/Desktop/E-Commerce-Website-Shopp.my/src/java/Servlet/manageBillControl.java</file>
+            <file>file:/C:/Users/tungn/OneDrive/Desktop/E-Commerce-Website-Shopp.my/src/java/dao/AllDao.java</file>
+            <file>file:/C:/Users/tungn/OneDrive/Desktop/E-Commerce-Website-Shopp.my/web/newjsp.jsp</file>
+            <file>file:/C:/Users/tungn/OneDrive/Desktop/E-Commerce-Website-Shopp.my/src/java/dao/NewClass.java</file>
         </group>
     </open-files>
 </project-private>

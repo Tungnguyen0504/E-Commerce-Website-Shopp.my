@@ -134,11 +134,24 @@
                         <div class="col-md-6 ml-auto">
                             <table class="table table-clear">
                                 <tbody>
+                                    <c:if test="${sessionScope.coupon != null}">
+                                        <c:set value="${sessionScope.coupon.discountPercent}" var="discount"/>
+                                    </c:if>
+                                    <c:if test="${sessionScope.coupon == null}">
+                                        <c:set value="${0}" var="discount"/>
+                                    </c:if>
+
                                     <tr>
                                         <td class="left">
                                             <strong class="text-dark">Sub total</strong>
                                         </td>
                                         <td class="right"><fmt:setLocale value = "en_US"/><fmt:formatNumber value="${s}" type="currency"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="left">
+                                            <strong class="text-dark">Discount</strong>
+                                        </td>
+                                        <td class="right"><fmt:setLocale value = "en_US"/><fmt:formatNumber value="${s*discount/100}" type="currency"/></td>
                                     </tr>
                                     <tr>
                                         <td class="left">
@@ -150,7 +163,7 @@
                                         <td class="left">
                                             <strong class="text-dark" style="font-size: 24px; color: red !important;">Grand Total</strong>
                                         </td>
-                                        <td class="right" style="font-size: 24px; color: mediumblue;"><fmt:setLocale value = "en_US"/><fmt:formatNumber value="${s}" type="currency"/></td>
+                                        <td class="right" style="font-size: 24px; color: mediumblue;"><fmt:setLocale value = "en_US"/><fmt:formatNumber value="${s-s*discount/100}" type="currency"/></td>
                                     </tr>
                                 </tbody>
                             </table>

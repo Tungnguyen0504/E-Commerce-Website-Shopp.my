@@ -6,6 +6,8 @@
 package Servlet;
 
 import dao.AllDao;
+import dao.paggingDAO;
+import generic.getUrl;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -14,8 +16,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.Camera;
 import model.Category;
+import model.Laptop;
 import model.Products;
+import model.SPhone;
 import model.User;
 
 /**
@@ -25,15 +30,6 @@ import model.User;
 @WebServlet(name = "manageProductControl", urlPatterns = {"/manageProduct"})
 public class manageProductControl extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -45,8 +41,7 @@ public class manageProductControl extends HttpServlet {
         HttpSession session = request.getSession();
         User u = (User) session.getAttribute("acc");
         if (u == null) {
-            String url = request.getRequestURI() + "?" + request.getQueryString();
-            request.setAttribute("url", url);
+            getUrl.getUrl(request, response);
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
             if (action == null) {
@@ -55,99 +50,82 @@ public class manageProductControl extends HttpServlet {
             if (action.equalsIgnoreCase("view")) {
                 doGet_view(request, response);
             }
-            if (action.equalsIgnoreCase("deleteProduct")) {
-                doPost_delete(request, response);
-            }
-            if (action.equalsIgnoreCase("getPath")) {
-                request.getRequestDispatcher("add-new-product.jsp").forward(request, response);
-            }
         }
     }
 
     protected void doGet_load(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String indexPage = request.getParameter("index");
-        String cid = request.getParameter("cid");
+        int cid = Integer.parseInt(request.getParameter("cid"));
 
-        AllDao dao = new AllDao();
+        paggingDAO dao = new paggingDAO();
 
-        int count = dao.countProduct(cid);   //65
-        int endPage = count / 9;   //endPage = 12
-        if (count % 9 != 0) {
-            endPage++;   //endPage = 13
-        }
-        //lấy index từ trang jsp, sau đó get ra list theo index trong dao
-
-        if (indexPage == null) {
-            indexPage = "1";
-        }
-        int index = Integer.parseInt(indexPage);
-        List<Products> list = dao.paggingProduct(cid, index);
+        List<Products> list = dao.getAllProductByCid(cid);
 
         request.setAttribute("cid", cid);
         request.setAttribute("listProduct", list);
-        request.setAttribute("end", endPage);
-        request.setAttribute("tag", index);    //index active
-        request.setAttribute("count", count);
-        request.setAttribute("indexPage", indexPage);
 
         request.getRequestDispatcher("manage-product.jsp").forward(request, response);
     }
 
     protected void doGet_view(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int productID = Integer.parseInt(request.getParameter("id"));
+        int productID = Integer.parseInt(request.getParameter("pid"));
         AllDao dao = new AllDao();
         Products product = dao.getProductByID(productID);
-
-        request.setAttribute("view", product);
-        request.getRequestDispatcher("edit-product.jsp").forward(request, response);
+        if (product.getCategoryID() == 1) {
+            Laptop l = dao.getLaptop(productID);
+            request.setAttribute("lap", l);
+        } else if (product.getCategoryID() == 2) {
+            SPhone sp = dao.getSPhone(productID);
+            request.setAttribute("sp", sp);
+        } else {
+            Camera cam = dao.getCamera(productID);
+            request.setAttribute("cam", cam);
+        }
+        request.setAttribute("pro", product);
+        request.getRequestDispatcher("update-product.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
 
-        if (action.equalsIgnoreCase("addProduct1")) {
-            doPost_add1(request, response);
-        }
-        if (action.equalsIgnoreCase("addProduct2")) {
-            doPost_add2(request, response);
+        if (action.equalsIgnoreCase("addProduct")) {
+            doPost_add(request, response);
         }
         if (action.equalsIgnoreCase("updateProduct")) {
             doPost_update(request, response);
         }
+        if (action.equalsIgnoreCase("deleteProduct")) {
+            doPost_delete(request, response);
+        }
     }
 
-    protected void doPost_add1(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost_add(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String image1 = request.getParameter("image1");
-        String image2 = request.getParameter("image2");
-        String image3 = request.getParameter("image3");
-        String image4 = request.getParameter("image4");
-        String productName = request.getParameter("productName");
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
-        String color = request.getParameter("color");
-        String brand = request.getParameter("brand");
+
         double price = Double.parseDouble(request.getParameter("price"));
-        double priceDiscount = Double.parseDouble(request.getParameter("priceDiscount"));
-        String category = request.getParameter("category");
+        int percent = Integer.parseInt(request.getParameter("percent"));
+
+        Products p = new Products();
+        p.setCategoryID(Integer.parseInt(request.getParameter("cid")));
+        p.setProductName(request.getParameter("productName"));
+        p.setTittle(request.getParameter("tittle"));
+        p.setDescription(request.getParameter("description"));
+        p.setPQuantity(Integer.parseInt(request.getParameter("quantity")));
+        p.setImage1(request.getParameter("image1"));
+        p.setImage2(request.getParameter("image2"));
+        p.setImage3(request.getParameter("image3"));
+        p.setImage4(request.getParameter("image4"));
+        p.setColor(request.getParameter("color"));
+        p.setBrand(request.getParameter("brand"));
+        p.setPrice(price);
+        p.setPriceDiscount(price - price * percent / 100);
+        p.setDiscountPercent(percent);
 
         AllDao dao = new AllDao();
-        dao.addNewProduct1(category, productName, quantity, color, image1, image2, image3, image4, brand, price, priceDiscount);
+        dao.addProduct(p);
 
-        if (category.equalsIgnoreCase("1")) {
-            request.setAttribute("laptop", "laptop");
-        } else if (category.equalsIgnoreCase("2")) {
-            request.setAttribute("sphone", "sphone");
-        } else if (category.equalsIgnoreCase("3")) {
-            request.setAttribute("camera", "camera");
-        }
-        request.getRequestDispatcher("add-new-product-detail.jsp").forward(request, response);
-    }
-
-    protected void doPost_add2(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
         String p1 = request.getParameter("p1");
         String p2 = request.getParameter("p2");
         String p3 = request.getParameter("p3");
@@ -157,11 +135,10 @@ public class manageProductControl extends HttpServlet {
         String p7 = request.getParameter("p7");
         String p8 = request.getParameter("p8");
         String p9 = request.getParameter("p9");
-        String type = request.getParameter("type");
+        int cid = Integer.parseInt(request.getParameter("cid"));
 
-        AllDao dao = new AllDao();
         int productID = dao.getLastProductID();
-        dao.addNewProduct2(productID, p1, p2, p3, p4, p5, p6, p7, p8, p9, type);
+        dao.addNewProduct2(productID, p1, p2, p3, p4, p5, p6, p7, p8, p9, cid);
 
         response.sendRedirect("manageProduct?cid=1");
     }
@@ -169,27 +146,58 @@ public class manageProductControl extends HttpServlet {
     protected void doPost_update(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         AllDao dao = new AllDao();
-
-        String image = request.getParameter("image");
+        int pid = Integer.parseInt(request.getParameter("pid"));
+        Products p = dao.getProductByID(pid);
+        String image1 = request.getParameter("image1");
+        String image2 = request.getParameter("image2");
+        String image3 = request.getParameter("image3");
+        String image4 = request.getParameter("image4");
+        if (image1 == null || image1.equals("")) {
+            image1 = p.getImage1();
+        }
+        if (image2 == null || image2.equals("")) {
+            image2 = p.getImage2();
+        }
+        if (image3 == null || image3.equals("")) {
+            image3 = p.getImage3();
+        }
+        if (image4 == null || image4.equals("")) {
+            image4 = p.getImage4();
+        }
         String productName = request.getParameter("productName");
+        String tittle = request.getParameter("tittle");
+        String des = request.getParameter("des");
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         String color = request.getParameter("color");
         String brand = request.getParameter("brand");
         double price = Double.parseDouble(request.getParameter("price"));
-        double priceDiscount = Double.parseDouble(request.getParameter("priceDiscount"));
-        String category = request.getParameter("category");
-        int id = Integer.parseInt(request.getParameter("productID"));
+        int percent = Integer.parseInt(request.getParameter("percent"));
+        double priceDiscount = price - price * percent / 100;
+        int cid = Integer.parseInt(request.getParameter("cid"));
 
-        dao.updateProduct(image, productName, quantity, color, brand, price, priceDiscount, category, id);
+        dao.updateProduct(cid, pid, productName, tittle, des, quantity, color, image1, image2, image3, image4, brand, price, priceDiscount, percent);
+
+        String p1 = request.getParameter("p1");
+        String p2 = request.getParameter("p2");
+        String p3 = request.getParameter("p3");
+        String p4 = request.getParameter("p4");
+        String p5 = request.getParameter("p5");
+        String p6 = request.getParameter("p6");
+        String p7 = request.getParameter("p7");
+        String p8 = request.getParameter("p8");
+        String p9 = request.getParameter("p9");
+
+        dao.updateProductDetail(pid, cid, p1, p2, p3, p4, p5, p6, p7, p8, p9);
+
         response.sendRedirect("manageProduct?cid=1");
     }
 
     protected void doPost_delete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String productID = request.getParameter("id");
+        int pid = Integer.parseInt(request.getParameter("pid"));
         AllDao dao = new AllDao();
 
-        dao.deleteProduct(productID);
+        dao.deleteProduct(pid);
         response.sendRedirect("manageProduct?cid=1");
     }
 
