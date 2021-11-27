@@ -177,7 +177,7 @@
     $('.product-slider-4').slick({
         arrows: true,
         dots: false,
-        autoplay: false,
+        autoplay: true,
         infinite: true,
         slidesToShow: 4,
         prevArrow: '<button type="button" class="slick-prev"><i class="icofont icofont-long-arrow-left"></i></button>',
@@ -209,7 +209,7 @@
     $('.product-slider-4-full').slick({
         arrows: true,
         dots: false,
-        autoplay: false,
+        autoplay: true,
         infinite: true,
         slidesToShow: 4,
         prevArrow: '<button type="button" class="slick-prev"><i class="icofont icofont-long-arrow-left"></i></button>',
@@ -247,7 +247,7 @@
     $('.product-slider-3').slick({
         arrows: true,
         dots: false,
-        autoplay: false,
+        autoplay: true,
         infinite: true,
         slidesToShow: 3,
         prevArrow: '<button type="button" class="slick-prev"><i class="icofont icofont-long-arrow-left"></i></button>',
@@ -523,12 +523,13 @@
     /*--
      Count Down Timer
      ------------------------*/
-    $('[data-countdown]').each(function () {
-        var $this = $(this), finalDate = $(this).data('countdown');
-        $this.countdown(finalDate, function (event) {
-            $this.html(event.strftime('<span class="cdown day"><span class="time-count">%-D</span> <p>Days</p></span> <span class="cdown hour"><span class="time-count">%-H</span> <p>Hours</p></span> <span class="cdown minutes"><span class="time-count">%M</span> <p>Minute</p></span> <span class="cdown second"><span class="time-count">%S</span> <p>Second</p></span>'));
-        });
-    });
+//    $('[data-countdown]').each(function () {
+//        var $this = $(this), finalDate = $(this).data('countdown');
+//        $this.countdown(finalDate, function (event) {
+//            $this.html(event.strftime('<span class="cdown day"><span class="time-count">%-D</span> <p>Days</p></span> <span class="cdown hour"><span class="time-count">%-H</span> <p>Hours</p></span> <span class="cdown minutes"><span class="time-count">%M</span> <p>Minute</p></span> <span class="cdown second"><span class="time-count">%S</span> <p>Second</p></span>'));
+//        });
+//    });
+
 
     /*--
      CLose Popup

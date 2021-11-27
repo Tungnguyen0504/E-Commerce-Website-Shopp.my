@@ -141,15 +141,21 @@ public class manageAccountControl extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-
-        if (action.equalsIgnoreCase("addAccount")) {
-            doPost_add(request, response);
-        }
-        if (action.equalsIgnoreCase("updateAccount")) {
-            doPost_update(request, response);
-        }
-        if (action.equalsIgnoreCase("deleteAccount")) {
-            doPost_delete(request, response);
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("acc");
+        if (u == null) {
+            getUrl.getUrl(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        } else {
+            if (action.equalsIgnoreCase("addAccount")) {
+                doPost_add(request, response);
+            }
+            if (action.equalsIgnoreCase("updateAccount")) {
+                doPost_update(request, response);
+            }
+            if (action.equalsIgnoreCase("deleteAccount")) {
+                doPost_delete(request, response);
+            }
         }
     }
 

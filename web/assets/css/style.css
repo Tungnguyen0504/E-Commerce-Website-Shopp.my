@@ -13376,11 +13376,12 @@ input#rate-5:checked ~ label{
 
 .offer-time-wrap {
     text-align: center;
-    padding: 55px 30px 35px;
+    padding: 47px 30px 35px;
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
-    margin-top: 10px;
+    margin-top: 6px;
+    border-radius: 5px;
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
@@ -13402,7 +13403,7 @@ input#rate-5:checked ~ label{
 }
 
 .offer-time-wrap h1 {
-    color: #ffffff;
+    color: #ff0255;
     font-size: 46px;
     line-height: 1;
     font-weight: 700;
@@ -13413,6 +13414,7 @@ input#rate-5:checked ~ label{
     font-size: 18px;
     display: block;
     margin-bottom: 3px;
+    color: lightgray;
 }
 
 .offer-time-wrap h3 {
@@ -13451,7 +13453,6 @@ input#rate-5:checked ~ label{
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
     justify-content: space-between;
-    margin-top: 40px;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {

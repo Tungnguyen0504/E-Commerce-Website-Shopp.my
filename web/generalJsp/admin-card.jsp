@@ -107,53 +107,10 @@
                     <div class="icon">
                         <i class="bi bi-camera" aria-hidden="true"></i>
                     </div>
-                    <a href="manageProduct" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+                    <a href="manageProduct?cid=1" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
         </div>
-        <!--        <div class="row">
-                    <div class="col-md-4 col-xl-3">
-                        <div class="card bg-c-blue order-card">
-                            <div class="card-block">
-                                <h6 class="m-b-20">Laptop</h6>
-                                <h2 class="text-right"><i class="bi bi-camera"></i></i><span>20</span></h2>
-                                <p class="m-b-0">Total of Products<span class="f-right">65</span></p>
-                            </div>
-                        </div>
-                    </div>
-        
-                  
-                    <div class="col-md-4 col-xl-3">
-                        <div class="card bg-c-green order-card">
-                            <div class="card-block">
-                                <h6 class="m-b-20">User Active</h6>
-                                <h2 class="text-right"><i class="fas fa-users"></i><span>${countU} </span></h2>
-                                <p class="m-b-0">Total of Users<span class="f-right"><strong>${countU1}</strong></span></p>
-                            </div>
-                        </div>
-                    </div>
-        
-       
-        <div class="col-md-4 col-xl-3">
-            <div class="card bg-c-yellow order-card">
-                <div class="card-block">
-                    <h6 class="m-b-20">Total Order</h6>
-                    <h2 class="text-right"><i class="far fa-calendar-check"></i><span>${countO}</span></h2>
-                    <p class="m-b-0">Completed Orders<span class="f-right">${countO1}</span></p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 col-xl-3">
-            <div class="card bg-c-pink order-card">
-                <div class="card-block">
-                    <h6 class="m-b-20">Earning (Monthly)</h6>
-                    <h2 class="text-right"><i class="bi bi-cart-check-fill"></i><span><fmt:setLocale value = "en_US"/><fmt:formatNumber value="${earn}" type="currency"/></span></h2>
-                    <p class="m-b-0">Earning (Annual)<span class="f-right"><fmt:setLocale value = "en_US"/><fmt:formatNumber value="${earn1}" type="currency"/></span></p>
-                </div>
-            </div>
-        </div>
-    </div>-->
     </body>
 </html>

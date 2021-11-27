@@ -35,7 +35,14 @@
                 font-size: 13px;
             }
             .media {
+                border: 1px solid transparent;
                 display: flex;
+                padding: 40px;
+            }
+            .media:hover {
+                border:1px solid #ddd;
+                background-color: #fff;
+                transition: all .8s ease;
             }
             .carousel .media img {
                 width: 80px;
@@ -83,7 +90,7 @@
                 border: 5px double;    
             }
             .carousel-inner {
-                padding: 20px 140px;
+                padding: 20px 150px;
             }
             .head_title h2 {
                 font-weight: 700;
@@ -497,11 +504,61 @@
 
                             <!-- Offer Time Wrap Start -->
                             <div class="col mb-30">
-                                <div class="offer-time-wrap" style="background-image: url(assets/images/bg/offer-products.jpg)">
+                                <style>
+                                    .bg-gradient-4 {
+                                        background: #2c4d62;
+                                    }
+                                    .countdown span {
+                                        background: #000;
+                                        padding: 5px;
+                                        padding-bottom: 8px;
+                                        border-radius: 10px;
+                                    }
+                                </style>
+                                <div class="offer-time-wrap bg-gradient-4">
                                     <h1><span>UP TO</span> 55%</h1>
                                     <h3>QUALITY & EXCLUSIVE <span>PRODUCTS</span></h3>
                                     <h4><span>LIMITED TIME OFFER</span> GET YOUR PRODUCT</h4>
-                                    <div class="countdown" data-countdown="2019/06/20"></div>
+                                    <!--                                    <style>
+                                                                            .countdown {
+                                                                                text-transform: uppercase;
+                                                                                font-weight: bold;
+                                                                            }
+                                    
+                                                                            .countdown span {
+                                                                                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+                                                                                font-size: 3rem;
+                                                                                margin-left: 0.8rem;
+                                                                            }
+                                    
+                                                                            .countdown span:first-of-type {
+                                                                                margin-left: 0;
+                                                                            }
+                                    
+                                                                            .countdown-circles {
+                                                                                text-transform: uppercase;
+                                                                                font-weight: bold;
+                                                                            }
+                                    
+                                                                            .countdown-circles span {
+                                                                                width: 100px;
+                                                                                height: 100px;
+                                                                                border-radius: 50%;
+                                                                                background: rgba(255, 255, 255, 0.2);
+                                                                                display: flex;
+                                                                                align-items: center;
+                                                                                justify-content: center;
+                                                                                box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+                                                                            }
+                                    
+                                                                            .countdown-circles span:first-of-type {
+                                                                                    margin-left: 0;
+                                                                            }
+                                    
+                                                                        </style>-->
+                                    <div class="rounded text-white text-center mb-5">
+                                        <div id="clock-c" class="countdown pt-40"></div>
+                                    </div>
                                 </div>
                             </div><!-- Offer Time Wrap End -->
 
@@ -599,6 +656,7 @@
         <div class="product-section bg-gray section" style="padding: 60px 0;">
             <div class="container-fluid">
                 <div class="row">
+
                     <div class="head_title text-center fix">
                         <h2 class="text-uppercase">What Client Say</h2>
                         <h5>Clean and Modern design is our best specialist</h5>
@@ -738,11 +796,14 @@
                 </div>
             </div>
         </div><!-- New Arrival Product Section End -->
+
+
         <jsp:include page="footer.jsp"></jsp:include>
 
             <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
             <script src="assets/js/popper.min.js" type="text/javascript"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js"></script>
             <script src="assets/js/plugins.js"></script>
             <script src="assets/js/main.js"></script>
             <script>
@@ -766,6 +827,15 @@
                                                                             });
                                                                         }
                                                                     }
+                                                                    $(function () {
+                                                                        function get15dayFromNow() {
+                                                                            return new Date(new Date().valueOf() + 15 * 24 * 60 * 60 * 1000);
+                                                                        }
+
+                                                                        $('#clock-c').countdown(get15dayFromNow(), function (event) {
+                                                                            var $this = $(this).html(event.strftime('<span class="cdown day"><span class="time-count">%D</span> <p>Days</p></span> <span class="cdown hour"><span class="time-count">%H</span> <p>Hours</p></span> <span class="cdown minutes"><span class="time-count">%M</span> <p>Minute</p></span> <span class="cdown second"><span class="time-count">%S</span> <p>Second</p></span>'));
+                                                                        });
+                                                                    });
         </script>
 
     </body>
