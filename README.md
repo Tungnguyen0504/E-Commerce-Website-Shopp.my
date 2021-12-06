@@ -58,20 +58,20 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email`, `email_client`, `project_title`, `project_description`
-d
+E-commerce is fast gaining ground as an accepted and used business paradigm. More and more business houses are implementing web sites providing functionality for performing commercial transactions over the web. It is reasonable to say that the process of shopping on the web is becoming commonplace.
+
+The objective of this project is to develop a general-purpose e-commerce store where any product (such as Laptop, Smartphone, Camera) can be bought from the comfort of home through the Internet.
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
 ### Built With
 
-* [Next.js](https://nextjs.org/)
-* [React.js](https://reactjs.org/)
-* [Vue.js](https://vuejs.org/)
-* [Angular](https://angular.io/)
-* [Svelte](https://svelte.dev/)
-* [Laravel](https://laravel.com)
+* [HTML](https://www.w3schools.com/howto/howto_website.asp/)
+* [CSS](https://www.w3schools.com/css/)
+* [Javascript](https://www.w3schools.com/js/)
+* [Java](https://www.java.com/en/)
 * [Bootstrap](https://getbootstrap.com)
 * [JQuery](https://jquery.com)
 
@@ -80,10 +80,12 @@ d
 
 
 <!-- GETTING STARTED -->
-## Getting Started
+## Screen short
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+* Home page:
+![Product Name Screen Shot][product-screenshot]
+
+![Product Name Screen Shot](https://github.com/Tungnguyen0504/E-Commerce-Website-Shopp.my/blob/master/web/assets/images/screen-short/list-product.jpg)
 
 ### Prerequisites
 
@@ -201,4 +203,4 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 [license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]:../assets/images/screen-short/home.jpg
+[product-screenshot]:https://github.com/Tungnguyen0504/E-Commerce-Website-Shopp.my/blob/master/web/assets/images/screen-short/home.jpg
