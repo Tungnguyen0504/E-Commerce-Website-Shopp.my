@@ -4,14 +4,12 @@
 <br />
 <div align="center">
   <a href="https://github.com/Tungnguyen0504">
-    <img src="https://github.com/Tungnguyen0504/E-Commerce-Website-Shopp.my/blob/master/web/assets/images/icons/1-removebg-preview.png" alt="Logo" width="80">
+    <img src="https://github.com/Tungnguyen0504/E-Commerce-Website-Shopp.my/blob/master/web/assets/images/icons/1-removebg-preview.png" alt="Logo" width="175">
   </a>
 
 <h3 align="center">project_title</h3>
 
   <p align="center">
-    project_description
-    <br />
     <a href="https://github.com/Tungnguyen0504/E-Commerce-Website-Shopp.my"><strong>Explore the docs »</strong></a>
     <br />
     <br />
@@ -55,7 +53,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
+<br>
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 E-commerce is fast gaining ground as an accepted and used business paradigm. More and more business houses are implementing web sites providing functionality for performing commercial transactions over the web. It is reasonable to say that the process of shopping on the web is becoming commonplace.
@@ -82,9 +80,13 @@ The objective of this project is to develop a general-purpose e-commerce store w
 <!-- GETTING STARTED -->
 ## Screen short
 
-* Home page:
+* Home page: <br>
 ![Product Name Screen Shot][product-screenshot]
+<br>
+* List Product page: <br>
+![Product Name Screen Shot](https://github.com/Tungnguyen0504/E-Commerce-Website-Shopp.my/blob/master/web/assets/images/screen-short/list-product.jpg)
 
+* Product Detail page: <br>
 ![Product Name Screen Shot](https://github.com/Tungnguyen0504/E-Commerce-Website-Shopp.my/blob/master/web/assets/images/screen-short/list-product.jpg)
 
 ### Prerequisites

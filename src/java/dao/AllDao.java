@@ -208,7 +208,7 @@ public class AllDao {
         }
         return list;
     }
-    
+
     public List<Products> getTop4BestSellers() {
         List<Products> list = new ArrayList<>();
         String query = "SELECT TOP 4 p.ProductID, p.CategoryID, p.ProductName, p.Tittle, p.Description, p.Quantity, p.Color, p.Image1, p.Image2, p.Image3, p.Image4, p.Brand, p.Price, p.PriceDiscount, p.DiscountPercent, SUM(od.Quantity) AS qt\n"
@@ -399,8 +399,9 @@ public class AllDao {
     }
 
     public void deleteAccount(String id) {
-        String query = "DELETE FROM dbo.Order_Details WHERE OrderID IN (SELECT o.OrderID FROM dbo.Orders o JOIN dbo.Users u ON u.UserID = o.UserID WHERE u.UserID = ?)\n"
+        String query = "DELETE FROM dbo.Order_Details WHERE OrderID IN (SELECT o.OrderID FROM dbo.Orders o JOIN dbo.Users u ON u.UserID = o.UserID WHERE u.UserID IN (?))\n"
                 + "DELETE FROM dbo.Orders WHERE userID = ?\n"
+                + "DELETE FROM dbo.Feedback WHERE UserID = ?\n"
                 + "DELETE FROM dbo.Users WHERE UserID = ?";
         try {
             conn = new DBContext().getConnection();
@@ -408,6 +409,7 @@ public class AllDao {
             ps.setString(1, id);
             ps.setString(2, id);
             ps.setString(3, id);
+            ps.setString(4, id);
             ps.executeUpdate();
 
         } catch (Exception e) {
@@ -979,8 +981,8 @@ public class AllDao {
         Date dateFrom = c.getTime();
         return df.format(dateFrom);
     }
-    
-     public List<Order> getRecentOrder() {
+
+    public List<Order> getRecentOrder() {
         List<Order> list = new ArrayList<Order>();
         String query = "SELECT TOP 5 * FROM dbo.Orders";
         try {
@@ -997,7 +999,6 @@ public class AllDao {
     }
 
     //end admin dashboard
-
     public static void main(String[] args) {
         AllDao dao = new AllDao();
         List<OrderDetails> list = dao.getOrderDetailByID(1);
