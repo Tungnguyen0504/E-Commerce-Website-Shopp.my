@@ -52,8 +52,8 @@
 
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
-<br>
+## About The Project <br>
+
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 E-commerce is fast gaining ground as an accepted and used business paradigm. More and more business houses are implementing web sites providing functionality for performing commercial transactions over the web. It is reasonable to say that the process of shopping on the web is becoming commonplace.
@@ -66,7 +66,7 @@ The objective of this project is to develop a general-purpose e-commerce store w
 
 ### Built With
 
-* [HTML](https://www.w3schools.com/howto/howto_website.asp/)
+* [HTML](https://www.w3schools.com/html/)
 * [CSS](https://www.w3schools.com/css/)
 * [Javascript](https://www.w3schools.com/js/)
 * [Java](https://www.java.com/en/)
@@ -83,19 +83,8 @@ The objective of this project is to develop a general-purpose e-commerce store w
 * Home page: <br>
 ![Product Name Screen Shot][product-screenshot]
 <br>
-* List Product page: <br>
-![Product Name Screen Shot](https://github.com/Tungnguyen0504/E-Commerce-Website-Shopp.my/blob/master/web/assets/images/screen-short/list-product.jpg)
-
-* Product Detail page: <br>
-![Product Name Screen Shot](https://github.com/Tungnguyen0504/E-Commerce-Website-Shopp.my/blob/master/web/assets/images/screen-short/list-product.jpg)
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+* Demo shopping: <br>
+![Product Name Screen Shot](https://github.com/Tungnguyen0504/E-Commerce-Website-Shopp.my/blob/master/web/assets/images/screen-short/demo-shopping.mp4)
 
 ### Installation
 
@@ -128,20 +117,6 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 
 
-<!-- ROADMAP -->
-## Roadmap
-
-- [] Feature 1
-- [] Feature 2
-- [] Feature 3
-    - [] Nested Feature
-
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
 <!-- CONTRIBUTING -->
 ## Contributing
 
@@ -159,16 +134,6 @@ Don't forget to give the project a star! Thanks again!
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
 <!-- CONTACT -->
 ## Contact
 
@@ -177,18 +142,6 @@ Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_
 Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 
 
 <!-- MARKDOWN LINKS & IMAGES -->

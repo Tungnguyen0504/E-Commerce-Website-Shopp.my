@@ -162,7 +162,7 @@
                 top: 12%;
                 transform: translate(-50%, -50%);
             }
-            .icon {
+            .icon-content .icon {
                 width: 50px;
                 height: 50px;
                 padding: 0;
