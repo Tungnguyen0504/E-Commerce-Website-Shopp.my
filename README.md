@@ -62,7 +62,29 @@ The objective of this project is to develop a general-purpose e-commerce store w
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+### Functionalities
+1. User Registeration Cell.
 
+2. CRUD Operations like
+
+* User can add product to their cart and purchase summary.
+* Admin can add account, product to the product list.
+* Admin can edit the account, product details.
+* Admin can delete the account, product from the list.
+* Admin can view order detail and change status of bill pending, delivery or finish.
+
+3. Security
+* User can login into the site.
+* The entire site will change according to the role, depending on whether the client is User or Admin.
+* User can logout after completing.
+4. WebFlow
+* After adding products the cart the User can checkout using spring WebFlow.
+* Confirming User Details.
+* Confirming Shipping and Billing Address.
+* Receipt.
+* If the user cancels the webflow, it will go to cancel Page.
+* If the user submits the checkout, it will go to thank you page with the timing of delivery Report.
+* User can check order history in order-history page
 
 ### Built With
 
@@ -76,6 +98,25 @@ The objective of this project is to develop a general-purpose e-commerce store w
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
+### Installation
+
+1. Development Platform - Netbeans / JDK8.
+2. Database - SQL SERVER.
+3. Login account sa and config port 1433 for SQL SERVER.
+4. Run Database.
+5. Configure your databse configuration in `DBContext.java`.
+   ```sh
+    private final String serverName = "localhost";
+    private final String dbName = "YOUR DB NAME";
+    private final String portNumber = "1433";
+    private final String userID = "sa";
+    private final String password = "YOUR DB PASSWORD";
+   ```
+6. Run the server.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
 
 <!-- GETTING STARTED -->
 ## Screen short
@@ -84,52 +125,17 @@ The objective of this project is to develop a general-purpose e-commerce store w
 ![Product Name Screen Shot][product-screenshot]
 <br>
 * Demo shopping: <br>
-![Product Name Screen Shot](https://github.com/Tungnguyen0504/E-Commerce-Website-Shopp.my/blob/master/web/assets/images/screen-short/demo-shopping.mp4)
-
-### Installation
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/github_username/repo_name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
+https://user-images.githubusercontent.com/91137455/145101441-d825e67c-7de6-4950-96be-6e1b9e78b471.mp4
+<br>
+* Demo admin role: <br>
+https://linkedin.com/in/linkedin_username
+[product-screenshot]:https://github.com/Tungnguyen0504/E-Commerce-Website-Shopp.my/blob/master/web/assets/images/screen-short/demo-admin.mp4
 
 
 <!-- CONTRIBUTING -->
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Contributors are most welcome.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -137,9 +143,9 @@ Don't forget to give the project a star! Thanks again!
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Facebook - <a href="https://www.facebook.com/chang.namay/">Tùng Nguyễn</a>
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Email - <a href="tungnguyenn0504@gmail.com">tungnguyenn0504@gmail.com</a>
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
