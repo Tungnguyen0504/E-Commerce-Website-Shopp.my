@@ -7,7 +7,7 @@
     <img src="https://github.com/Tungnguyen0504/E-Commerce-Website-Shopp.my/blob/master/web/assets/images/icons/1-removebg-preview.png" alt="Logo" width="175">
   </a>
 
-<h3 align="center">E-Commerce Website Project</h3>
+<h3 align="center">E-Commerce Project - An amazing website</h3>
 
   <p align="center">
     <a href="https://github.com/Tungnguyen0504/E-Commerce-Website-Shopp.my"><strong>Explore the docs »</strong></a>
@@ -72,6 +72,7 @@ The objective of this project is to develop a general-purpose e-commerce store w
 3. Login account `sa` and config port `1433` for SQL SERVER.
 4. Run Database.
 5. Configure your databse configuration in `DBContext.java`.
+
    ```sh
     private final String serverName = "localhost";
     private final String dbName = "YOUR DB NAME";
@@ -104,7 +105,10 @@ https://user-images.githubusercontent.com/91137455/145105257-75b03f43-c6eb-406a-
 https://user-images.githubusercontent.com/91137455/145105963-3fb7d699-d80e-4b0a-9d97-f41d1b893da4.mp4
 
 
+## Somethings wrong!!
 
+If you find that something's wrong with this package, you can let me know by raising an issue on the GitHub issue tracker, 
+or take it as a task and 🧑‍💻 resolve it 💪 --> create a PullRequest 🛠.
 
 <!-- CONTRIBUTING -->
 ## Contributing
