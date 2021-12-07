@@ -125,11 +125,18 @@ The objective of this project is to develop a general-purpose e-commerce store w
 ![Product Name Screen Shot][product-screenshot]
 <br>
 * Demo shopping: <br>
-https://user-images.githubusercontent.com/91137455/145101441-d825e67c-7de6-4950-96be-6e1b9e78b471.mp4
+
+
+https://user-images.githubusercontent.com/91137455/145105257-75b03f43-c6eb-406a-96aa-e047bb474d52.mp4
+
+
 <br>
 * Demo admin role: <br>
-https://linkedin.com/in/linkedin_username
-[product-screenshot]:https://github.com/Tungnguyen0504/E-Commerce-Website-Shopp.my/blob/master/web/assets/images/screen-short/demo-admin.mp4
+
+
+https://user-images.githubusercontent.com/91137455/145105963-3fb7d699-d80e-4b0a-9d97-f41d1b893da4.mp4
+
+
 
 
 <!-- CONTRIBUTING -->
