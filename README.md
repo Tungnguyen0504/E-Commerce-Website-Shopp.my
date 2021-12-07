@@ -69,7 +69,7 @@ The objective of this project is to develop a general-purpose e-commerce store w
 
 1. Development Platform - Netbeans / JDK8.
 2. Database - SQL SERVER.
-3. Login account sa and config port 1433 for SQL SERVER.
+3. Login account `sa` and config port `1433` for SQL SERVER.
 4. Run Database.
 5. Configure your databse configuration in `DBContext.java`.
    ```sh
