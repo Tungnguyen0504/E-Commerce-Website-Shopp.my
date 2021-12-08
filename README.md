@@ -104,6 +104,9 @@ https://user-images.githubusercontent.com/91137455/145105257-75b03f43-c6eb-406a-
 
 https://user-images.githubusercontent.com/91137455/145105963-3fb7d699-d80e-4b0a-9d97-f41d1b893da4.mp4
 
+* Diagram:
+![diagram](https://user-images.githubusercontent.com/91137455/145210921-a7fd0968-b062-4fba-8109-492cd113c850.jpg)
+
 
 ## Somethings wrong!!
 
